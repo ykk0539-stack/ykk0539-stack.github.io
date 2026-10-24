@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>출소일·가석방 계산기 — 형기 만기일과 가석방 심사 시점</title>
+<meta name="description" content="형기(년·월), 처음 구금된 날, 판결 확정일만 넣으면 형기 종료일(만기 출소일)과 가석방 법정 최소 시점(형기 3분의 1), 심사 대상에 오르는 시점(형집행률 60% 안팎)을 바로 계산합니다. 형법 제57·72·73·83~86조, 형사소송법 제482조 기준.">
+<meta property="og:title" content="출소일·가석방 계산기">
+<meta property="og:description" content="형기·구속일·확정일 → 만기 출소일과 가석방 시점을 바로 계산">
+<meta property="og:type" content="website">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+:root{
+  --bg:#eef0f3;--paper:#ffffff;--ink:#1b2230;--ink-2:#5a6475;--line:#d3d8e0;
+  --navy:#243352;--green:#2d6a4a;--green-soft:#e6f0ea;--warn:#9a4b1f;--warn-soft:#f8ede4;
+  --display:"Noto Serif KR","Apple SD Gothic Neo",serif;
+  --body:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){--bg:#141821;--paper:#1d2330;--ink:#e8ebf0;--ink-2:#aab2c0;--line:#343d4d;
+    --navy:#c9d4ea;--green:#8fcfae;--green-soft:#1f3328;--warn:#e3a37c;--warn-soft:#3a2a20;color-scheme:dark}
+}
+:root[data-theme="dark"]{--bg:#141821;--paper:#1d2330;--ink:#e8ebf0;--ink-2:#aab2c0;--line:#343d4d;
+  --navy:#c9d4ea;--green:#8fcfae;--green-soft:#1f3328;--warn:#e3a37c;--warn-soft:#3a2a20;color-scheme:dark}
+
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:24px 40px}
+.wrap{max-width:820px;margin:0 auto}
+h1{font-family:var(--display);font-weight:700;font-size:clamp(24px,4.5vw,32px);color:var(--navy);margin:0 0 6px;text-wrap:balance}
+.lead{margin:0 0 18px;color:var(--ink-2);font-size:15px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:22px;
+  display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:22px;align-items:stretch}
+@media (max-width:640px){.card{grid-template-columns:1fr}}
+.in{display:grid;gap:16px;align-content:start;min-width:0}
+.field{display:grid;gap:6px}
+.field>label,.field>span{font-weight:500}
+input[type=date],input[type=number]{font:inherit;font-size:17px;color:var(--ink);background:var(--paper);border:1px solid var(--line);border-radius:8px;padding:10px 12px;width:100%;min-width:0}
+input:focus{outline:2px solid var(--green);outline-offset:1px}
+.term{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.unit{display:flex;align-items:center;gap:8px}
+.unit input{flex:1;font-variant-numeric:tabular-nums}
+.res{background:var(--green-soft);border-radius:10px;padding:22px 20px;display:flex;flex-direction:column;justify-content:center;min-width:0}
+.res .k{font-size:14px;color:var(--ink-2)}
+.res .v{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.5vw,38px);line-height:1.2;color:var(--green);font-variant-numeric:tabular-nums;margin:4px 0 8px;text-wrap:balance}
+.res .s{font-size:14px;color:var(--ink-2)}
+.res .s b{color:var(--ink);font-weight:500}
+.parole{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;gap:8px}
+.parole .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:15px}
+.parole .row b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.parole .row span{color:var(--ink-2)}
+.err{color:var(--warn);font-size:14px;min-height:1.4em}
+.note{font-size:13px;color:var(--ink-2);margin:14px 0 0;max-width:70ch}
+h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10px}
+.how{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 22px;font-size:15px}
+.how ol{margin:0;padding-left:20px}
+.how li{margin:6px 0}
+.how a,.foot a{color:var(--green);text-decoration:underline;text-underline-offset:2px}
+.foot{font-size:13px;color:var(--ink-2);margin:28px 0 0;line-height:1.7}
+</style>
+</head>
+<body>
+<div class="wrap">
+<h1>출소일·가석방 계산기</h1>
+<p class="lead">형기와 날짜 두 개만 넣으면 형기 종료일(만기 출소일)과 가석방 시점이 바로 나옵니다. 넣은 날짜는 저장되지 않고 이 화면 안에서만 계산됩니다.</p>
+<div class="card">
+  <div class="in">
+    <div class="field">
+      <span>형기</span>
+      <div class="term">
+        <span class="unit"><input type="number" id="term-y" min="0" max="50" value="1" inputmode="numeric" aria-label="형기 년"> 년</span>
+        <span class="unit"><input type="number" id="term-m" min="0" max="11" value="6" inputmode="numeric" aria-label="형기 월"> 월</span>
+      </div>
+    </div>
+    <div class="field">
+      <label for="d-arrest">처음 구금된 날 <small style="font-weight:400;color:var(--ink-2)">(불구속이면 비움)</small></label>
+      <input type="date" id="d-arrest" value="2025-11-03">
+    </div>
+    <div class="field">
+      <label for="d-final">판결이 확정된 날</label>
+      <input type="date" id="d-final" value="2026-04-15">
+    </div>
+    <div class="err" id="err" role="alert"></div>
+  </div>
+  <div class="res">
+    <div class="k">형기 종료일 (만기 출소)</div>
+    <div class="v" id="r-end">—</div>
+    <div class="s" id="r-sub"></div>
+    <div class="parole" id="parole" hidden>
+      <div class="row"><span>실제 복역 일수</span><b id="p-total">—</b></div>
+      <div class="row"><span>가석방 법정 최소 시점 (형기 3분의 1)</span><b id="p-third">—</b></div>
+      <div class="row"><span>심사 대상에 오르는 시점 (형집행률 60% 안팎)</span><b id="p-sixty">—</b></div>
+    </div>
+  </div>
+</div>
+<p class="note">확정일을 1일째로 형기를 달력으로 센 뒤, 처음 구금된 날부터 확정 전날까지 갇혀 있던 날을 하루씩 뺍니다(형법 제57·83~86조, 형사소송법 제482조). 가석방 시점은 처음 구금된 날부터 복역 일수의 3분의 1·60%가 지나는 날입니다(형법 제72·73조). 60%는 법정 기준이 아니라 실무에서 심사 대상에 오르는 시점으로 알려진 수준이며, 실제 가석방 여부와 시기는 심사 결과에 따라 다릅니다. 보석 등으로 나와 있던 기간, 경합범, 벌금 병과는 계산에 넣지 않습니다.</p>
+
+<h2>어떻게 세는지</h2>
+<div class="how">
+<ol>
+  <li><b>확정일 찾기</b> — 형기는 선고일이 아니라 판결이 확정된 날부터 셉니다(형법 제84조 제1항). 항소하지 않으면 선고 다음 날부터 7일이 지난 다음 날입니다.</li>
+  <li><b>확정일부터 형기를 달력으로 세기</b> — 1년 6월은 날수로 바꾸지 않고 「1년 6개월 뒤」입니다. 첫날은 몇 시든 하루로 칩니다(형법 제83·85조).</li>
+  <li><b>갇혀 있던 날을 하루 단위로 세기</b> — 처음 구금된 날부터 확정 전날까지 전부, 1일은 1일로 뺍니다(형법 제57조, 형사소송법 제482조).</li>
+  <li><b>2에서 3을 빼면 형기 종료일</b> — 석방은 종료일 당일입니다(형법 제86조). 같은 형기라도 확정일이 어느 달에 떨어지느냐에 따라 하루에서 사흘까지 달라집니다.</li>
+  <li><b>가석방</b> — 유기형은 형기의 3분의 1이 지나면 법적으로 가능하고(형법 제72조), 미결구금일수도 지난 기간에 넣어 셉니다(제73조). 실무에서는 형집행률 60% 수준부터 심사 대상에 오르는 것으로 알려져 있습니다.</li>
+</ol>
+<p style="margin:12px 0 0">계산 과정을 예시로 끝까지 따라간 글: <a href="https://damjangbak.tistory.com/48" rel="noopener">형기 종료일 계산 4단계</a> · <a href="https://damjangbak.tistory.com/23" rel="noopener">형기 계산법과 미결구금일수 산입</a> · <a href="https://damjangbak.tistory.com/14" rel="noopener">가석방 조건과 절차</a></p>
+</div>
+
+<p class="foot">기준 조문: 「형법」 제57조·제72조·제73조·제83조·제84조·제85조·제86조, 「형사소송법」 제482조, 「민법」 제160조(달력 계산의 말일 규칙). 조문은 <a href="https://www.law.go.kr" rel="noopener nofollow">국가법령정보센터</a> 기준으로 대조했습니다.<br>
+이 계산기는 참고용이며 법률 상담이 아닙니다. 정확한 형기 종료일은 교정시설 입소·이송 때 고지받은 날짜가 기준입니다. 운영: 담장밖 노트</p>
+</div>
+
+<script>
+(function(){
+  const $=id=>document.getElementById(id), DAY=86400000;
+  const parse=s=>{ if(!s) return null; const [y,m,d]=s.split('-').map(Number); if(!y||!m||!d||y<1950||y>2100) return null; const t=new Date(Date.UTC(y,m-1,d)); return (t.getUTCFullYear()===y&&t.getUTCMonth()===m-1&&t.getUTCDate()===d)?t:null; };
+  const addDays=(d,n)=>new Date(d.getTime()+n*DAY), diffDays=(a,b)=>Math.round((b-a)/DAY);
+  const fmt=d=>`${d.getUTCFullYear()}년 ${d.getUTCMonth()+1}월 ${d.getUTCDate()}일`;
+  const WD=['일','월','화','수','목','금','토'];
+  function calendarEnd(start,months){
+    if(months<=0) return addDays(start,-1);
+    const t=new Date(Date.UTC(start.getUTCFullYear(),start.getUTCMonth()+months,1));
+    const ld=new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth()+1,0)).getUTCDate();
+    const day=start.getUTCDate();
+    return day>ld ? new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),ld))
+                  : addDays(new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),day)),-1);
+  }
+  function reset(msg){ $('r-end').textContent='—'; $('r-sub').textContent=''; $('parole').hidden=true; $('err').textContent=msg||''; }
+  function calc(){
+    const Y=+$('term-y').value||0, M=+$('term-m').value||0;
+    const rawA=$('d-arrest').value, rawF=$('d-final').value;
+    const arrest=parse(rawA), fin=parse(rawF);
+    if(rawF&&!fin) return reset('판결 확정일의 연도를 네 자리로 확인해 주세요.');
+    if(rawA&&!arrest) return reset('처음 구금된 날의 연도를 네 자리로 확인해 주세요.');
+    if(!fin) return reset('판결이 확정된 날을 넣어 주세요.');
+    if(Y*12+M<=0||Y>50||M>11) return reset('형기를 확인해 주세요(년 0~50, 월 0~11).');
+    if(arrest&&arrest>fin) return reset('처음 구금된 날이 확정일보다 뒤입니다.');
+    $('err').textContent='';
+    const calEnd=calendarEnd(fin,Y*12+M);
+    const detained=arrest?diffDays(arrest,fin):0;          // 구속일 ~ 확정 전날 (양끝 포함)
+    const end=addDays(calEnd,-detained);
+    const start=arrest||fin;                                 // 복역 시작일
+    const total=diffDays(start,end)+1;                       // 실제 복역 일수 (양끝 포함)
+    $('r-end').textContent=fmt(end);
+    $('r-sub').innerHTML=`${WD[end.getUTCDay()]}요일 · 확정일부터 ${Y?Y+'년 ':''}${M?M+'월':''}이면 <b>${fmt(calEnd)}</b>, 미결구금 <b>${detained}일</b>을 뺀 날입니다.`;
+    const third=addDays(start,Math.ceil(total/3)-1), sixty=addDays(start,Math.ceil(total*0.6)-1);
+    $('p-total').textContent=`${total.toLocaleString('ko-KR')}일 (${fmt(start)}부터)`;
+    $('p-third').textContent=fmt(third);
+    $('p-sixty').textContent=fmt(sixty);
+    $('parole').hidden=false;
+  }
+  ['term-y','term-m'].forEach(id=>{ $(id).addEventListener('input',calc); $(id).addEventListener('change',calc); });
+  ['d-arrest','d-final'].forEach(id=>$(id).addEventListener('change',calc));
+  calc();
+})();
+</script>
+</body>
+</html>
