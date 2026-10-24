@@ -4,10 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>출소일·가석방 계산기 — 형기 만기일과 가석방 심사 시점</title>
-<meta name="description" content="형기(년·월), 처음 구금된 날, 판결 확정일만 넣으면 형기 종료일(만기 출소일)과 가석방 법정 최소 시점(형기 3분의 1), 심사 대상에 오르는 시점(형집행률 60% 안팎)을 바로 계산합니다. 형법 제57·72·73·83~86조, 형사소송법 제482조 기준.">
+<meta name="description" content="형기(년·월), 처음 구금된 날, 판결 확정일만 넣으면 형기 종료일(만기 출소일)과 가석방률(5%·10%·15%…)에 따른 가석방 출소 예상일을 바로 계산합니다. 형법 제57·72·73·83~86조, 형사소송법 제482조 기준.">
 <meta property="og:title" content="출소일·가석방 계산기">
 <meta property="og:description" content="형기·구속일·확정일 → 만기 출소일과 가석방 시점을 바로 계산">
 <meta property="og:type" content="website">
+<meta property="og:url" content="https://ykk0539-stack.github.io/">
+<link rel="canonical" href="https://ykk0539-stack.github.io/">
+<!-- 계산부(parse·calendarEnd·calc)는 도구\만기계산기\만기계산기.html(담장밖 /48 글 안 계산기의 원본)과 쌍둥이. 법 해석을 고치면 둘 다 고칠 것. -->
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
 <style>
 :root{
@@ -45,10 +48,16 @@ input:focus{outline:2px solid var(--green);outline-offset:1px}
 .res .v{font-family:var(--display);font-weight:700;font-size:clamp(28px,5.5vw,38px);line-height:1.2;color:var(--green);font-variant-numeric:tabular-nums;margin:4px 0 8px;text-wrap:balance}
 .res .s{font-size:14px;color:var(--ink-2)}
 .res .s b{color:var(--ink);font-weight:500}
+.parole[hidden]{display:none}
 .parole{margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);display:grid;gap:8px}
 .parole .row{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;font-size:15px}
 .parole .row b{font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
 .parole .row span{color:var(--ink-2)}
+.prow span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.prow input{width:68px;padding:6px 8px;font-size:16px;text-align:right;font-variant-numeric:tabular-nums}
+.chips{display:flex;gap:6px;flex-wrap:wrap}
+.chips button{font:inherit;font-size:13px;padding:4px 10px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.chips button[aria-pressed="true"]{background:var(--green);border-color:var(--green);color:#fff}
 .err{color:var(--warn);font-size:14px;min-height:1.4em}
 .note{font-size:13px;color:var(--ink-2);margin:14px 0 0;max-width:70ch}
 h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10px}
@@ -73,7 +82,7 @@ h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10p
       </div>
     </div>
     <div class="field">
-      <label for="d-arrest">처음 구금된 날 <small style="font-weight:400;color:var(--ink-2)">(불구속이면 비움)</small></label>
+      <label for="d-arrest">처음 구금된 날 <small style="font-weight:400;color:var(--ink-2)">(불구속 재판이었다면 수감된 날)</small></label>
       <input type="date" id="d-arrest" value="2025-11-03">
     </div>
     <div class="field">
@@ -88,21 +97,28 @@ h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10p
     <div class="s" id="r-sub"></div>
     <div class="parole" id="parole" hidden>
       <div class="row"><span>실제 복역 일수</span><b id="p-total">—</b></div>
-      <div class="row"><span>가석방 법정 최소 시점 (형기 3분의 1)</span><b id="p-third">—</b></div>
-      <div class="row"><span>심사 대상에 오르는 시점 (형집행률 60% 안팎)</span><b id="p-sixty">—</b></div>
+      <div class="row"><span>가석방 법정 최소 시점 (형기 3분의 1 복역)</span><b id="p-third">—</b></div>
+      <div class="row prow">
+        <span>가석방 <input type="number" id="p-rate" min="0" max="66" step="1" value="10" inputmode="numeric" aria-label="가석방률 퍼센트"> % 받으면 출소일</span>
+        <b id="p-date">—</b>
+      </div>
+      <div class="chips" aria-label="가석방률 빠른 선택">
+        <button type="button" data-rate="5">5%</button><button type="button" data-rate="10">10%</button><button type="button" data-rate="15">15%</button><button type="button" data-rate="20">20%</button><button type="button" data-rate="30">30%</button>
+      </div>
+      <div class="s" id="p-sub"></div>
     </div>
   </div>
 </div>
-<p class="note">확정일을 1일째로 형기를 달력으로 센 뒤, 처음 구금된 날부터 확정 전날까지 갇혀 있던 날을 하루씩 뺍니다(형법 제57·83~86조, 형사소송법 제482조). 가석방 시점은 처음 구금된 날부터 복역 일수의 3분의 1·60%가 지나는 날입니다(형법 제72·73조). 60%는 법정 기준이 아니라 실무에서 심사 대상에 오르는 시점으로 알려진 수준이며, 실제 가석방 여부와 시기는 심사 결과에 따라 다릅니다. 보석 등으로 나와 있던 기간, 경합범, 벌금 병과는 계산에 넣지 않습니다.</p>
+<p class="note">확정일을 1일째로 형기를 달력으로 센 뒤, 처음 구금된 날부터 확정 전날까지 갇혀 있던 날을 하루씩 뺍니다(형법 제57·83~86조, 형사소송법 제482조). 불구속으로 재판받다 확정 뒤에 수감됐다면 수감된 날을 넣으세요. 확정일부터 수감 전까지 구속되지 않은 날은 형기에 넣지 않아 그만큼 종료일이 뒤로 갑니다(형법 제84조 제2항). 날짜를 비우면 확정일에 수감된 것으로 봅니다. 가석방률은 「형기의 몇 %를 남기고 나오느냐」입니다. 10%면 전체 복역 일수의 10%만큼 만기보다 일찍 나오는 날을 계산합니다. 법으로는 형기의 3분의 1을 채우면 가석방이 가능하지만(형법 제72·73조, 미결구금일수 포함), 실제 가석방 여부와 비율은 심사 결과에 따라 다르며 못 받을 수도 있습니다. 보석 등으로 나와 있던 기간, 경합범, 벌금 병과는 계산에 넣지 않습니다.</p>
 
 <h2>어떻게 세는지</h2>
 <div class="how">
 <ol>
-  <li><b>확정일 찾기</b> — 형기는 선고일이 아니라 판결이 확정된 날부터 셉니다(형법 제84조 제1항). 항소하지 않으면 선고 다음 날부터 7일이 지난 다음 날입니다.</li>
+  <li><b>확정일 찾기</b> — 형기는 선고일이 아니라 판결이 확정된 날부터 셉니다(형법 제84조 제1항). 항소하지 않으면 선고 다음 날부터 7일을 세고, 마지막 날이 토요일·공휴일이면 다음 평일까지 늘어난 뒤 그다음 날이 확정일입니다(형사소송법 제66조). 검사가 항소하지 않았는지도 확인해야 합니다.</li>
   <li><b>확정일부터 형기를 달력으로 세기</b> — 1년 6월은 날수로 바꾸지 않고 「1년 6개월 뒤」입니다. 첫날은 몇 시든 하루로 칩니다(형법 제83·85조).</li>
   <li><b>갇혀 있던 날을 하루 단위로 세기</b> — 처음 구금된 날부터 확정 전날까지 전부, 1일은 1일로 뺍니다(형법 제57조, 형사소송법 제482조).</li>
   <li><b>2에서 3을 빼면 형기 종료일</b> — 석방은 종료일 당일입니다(형법 제86조). 같은 형기라도 확정일이 어느 달에 떨어지느냐에 따라 하루에서 사흘까지 달라집니다.</li>
-  <li><b>가석방</b> — 유기형은 형기의 3분의 1이 지나면 법적으로 가능하고(형법 제72조), 미결구금일수도 지난 기간에 넣어 셉니다(제73조). 실무에서는 형집행률 60% 수준부터 심사 대상에 오르는 것으로 알려져 있습니다.</li>
+  <li><b>가석방</b> — 유기형은 형기의 3분의 1이 지나면 법적으로 가능하고(형법 제72조), 미결구금일수도 지난 기간에 넣어 셉니다(제73조). 가석방률 N%는 만기일에서 전체 복역 일수의 N%만큼 앞당긴 날입니다. 심사·결정 절차는 가석방 글에 적었습니다.</li>
 </ol>
 <p style="margin:12px 0 0">계산 과정을 예시로 끝까지 따라간 글: <a href="https://damjangbak.tistory.com/48" rel="noopener">형기 종료일 계산 4단계</a> · <a href="https://damjangbak.tistory.com/23" rel="noopener">형기 계산법과 미결구금일수 산입</a> · <a href="https://damjangbak.tistory.com/14" rel="noopener">가석방 조건과 절차</a></p>
 </div>
@@ -127,6 +143,7 @@ h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10p
                   : addDays(new Date(Date.UTC(t.getUTCFullYear(),t.getUTCMonth(),day)),-1);
   }
   function reset(msg){ $('r-end').textContent='—'; $('r-sub').textContent=''; $('parole').hidden=true; $('err').textContent=msg||''; }
+  function rate(){ const v=Math.round(+$('p-rate').value); return isFinite(v)?v:NaN; }
   function calc(){
     const Y=+$('term-y').value||0, M=+$('term-m').value||0;
     const rawA=$('d-arrest').value, rawF=$('d-final').value;
@@ -134,24 +151,44 @@ h2{font-family:var(--display);font-size:20px;color:var(--navy);margin:34px 0 10p
     if(rawF&&!fin) return reset('판결 확정일의 연도를 네 자리로 확인해 주세요.');
     if(rawA&&!arrest) return reset('처음 구금된 날의 연도를 네 자리로 확인해 주세요.');
     if(!fin) return reset('판결이 확정된 날을 넣어 주세요.');
-    if(Y*12+M<=0||Y>50||M>11) return reset('형기를 확인해 주세요(년 0~50, 월 0~11).');
-    if(arrest&&arrest>fin) return reset('처음 구금된 날이 확정일보다 뒤입니다.');
+    if(!Number.isInteger(Y)||!Number.isInteger(M)||Y<0||M<0||Y*12+M<=0||Y>50||M>11) return reset('형기를 확인해 주세요(년 0~50, 월 0~11, 정수).');
     $('err').textContent='';
     const calEnd=calendarEnd(fin,Y*12+M);
-    const detained=arrest?diffDays(arrest,fin):0;          // 구속일 ~ 확정 전날 (양끝 포함)
-    const end=addDays(calEnd,-detained);
-    const start=arrest||fin;                                 // 복역 시작일
+    const termText=`${Y?Y+'년 ':''}${M?M+'월':''}`.trim();
+    let end, start, detained=0, gap=0;
+    if(arrest&&arrest>fin){                                  // 불구속 재판 → 확정 뒤 수감: 구속되지 않은 날은 형기에 안 넣음(형법 제84조 제2항)
+      gap=diffDays(fin,arrest); end=addDays(calEnd,gap); start=arrest;
+    }else{
+      detained=arrest?diffDays(arrest,fin):0;                // 구속일 ~ 확정 전날 (양끝 포함)
+      end=addDays(calEnd,-detained); start=arrest||fin;
+    }
+    if(end<fin){                                             // 미결구금이 형기 이상 → 확정일에 바로 석방
+      $('r-end').textContent=fmt(fin)+' (확정일 석방)';
+      $('r-sub').innerHTML=`미결구금 <b>${detained}일</b>이 형기 ${termText}(${diffDays(fin,calEnd)+1}일)보다 길거나 같아, 확정되는 날 형기가 이미 끝난 것으로 계산됩니다.`;
+      $('parole').hidden=true; return;
+    }
     const total=diffDays(start,end)+1;                       // 실제 복역 일수 (양끝 포함)
     $('r-end').textContent=fmt(end);
-    $('r-sub').innerHTML=`${WD[end.getUTCDay()]}요일 · 확정일부터 ${Y?Y+'년 ':''}${M?M+'월':''}이면 <b>${fmt(calEnd)}</b>, 미결구금 <b>${detained}일</b>을 뺀 날입니다.`;
-    const third=addDays(start,Math.ceil(total/3)-1), sixty=addDays(start,Math.ceil(total*0.6)-1);
+    $('r-sub').innerHTML= gap>0
+      ? `${WD[end.getUTCDay()]}요일 · 확정일부터 ${termText}이면 <b>${fmt(calEnd)}</b>, 확정 뒤 수감 전 <b>${gap}일</b>은 구속되지 않아 형기에 넣지 않고 그만큼 뒤로 간 날입니다.`
+      : `${WD[end.getUTCDay()]}요일 · 확정일부터 ${termText}이면 <b>${fmt(calEnd)}</b>, 미결구금 <b>${detained}일</b>을 뺀 날입니다.`;
+    const third=addDays(start,Math.ceil(total/3)-1);
     $('p-total').textContent=`${total.toLocaleString('ko-KR')}일 (${fmt(start)}부터)`;
     $('p-third').textContent=fmt(third);
-    $('p-sixty').textContent=fmt(sixty);
+    const r=rate();
+    document.querySelectorAll('.chips button').forEach(b=>b.setAttribute('aria-pressed', String(+b.dataset.rate===r)));
+    if(!(r>=0&&r<=66)){ $('p-date').textContent='—'; $('p-sub').textContent='가석방률은 0~66 사이로 넣어 주세요(형기의 3분의 1은 채워야 합니다).'; }
+    else{
+      const early=Math.round(total*r/100), pdate=addDays(end,-early);
+      $('p-date').textContent=fmt(pdate);
+      $('p-sub').innerHTML = r===0 ? '0%는 만기 출소와 같습니다.' : `${WD[pdate.getUTCDay()]}요일 · 만기보다 <b>${early.toLocaleString('ko-KR')}일</b> 일찍, 복역 일수로는 <b>${(total-early).toLocaleString('ko-KR')}일</b>(형집행률 ${100-r}%)입니다.`;
+    }
     $('parole').hidden=false;
   }
   ['term-y','term-m'].forEach(id=>{ $(id).addEventListener('input',calc); $(id).addEventListener('change',calc); });
   ['d-arrest','d-final'].forEach(id=>$(id).addEventListener('change',calc));
+  $('p-rate').addEventListener('input',calc); $('p-rate').addEventListener('change',calc);
+  document.querySelectorAll('.chips button').forEach(b=>b.addEventListener('click',()=>{ $('p-rate').value=b.dataset.rate; calc(); }));
   calc();
 })();
 </script>
