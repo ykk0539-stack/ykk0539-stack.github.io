@@ -1,0 +1,880 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>내 보험 분석 1분 점검 · 연락처 없는 무료 보장분석</title>
+<meta name="description" content="증권 사진·PDF를 올리거나 몇 가지만 고르면 빈 곳과 겹친 곳을 바로 보여 드려요. 이름·전화번호를 묻지 않고, 파일은 휴대폰 밖으로 나가지 않아요.">
+<meta name="theme-color" content="#2f5d50">
+<link rel="canonical" href="https://ykk0539-stack.github.io/bojang/">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-title" content="내 보험 점검">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://ykk0539-stack.github.io/bojang/">
+<meta property="og:title" content="내 보험 1분 점검 — 연락처 없이 바로 보는 보장분석">
+<meta property="og:description" content="증권 한 장 올리면 빈 곳과 겹친 곳이 바로. 이름·전화번호 묻지 않아요.">
+<meta property="og:image" content="https://ykk0539-stack.github.io/bojang/og.png">
+<meta property="og:locale" content="ko_KR">
+<style>
+:root{
+  --bg:#f6f3ee; --card:#ffffff; --ink:#22302b; --sub:#6b7671; --line:#e6e1d8;
+  --main:#2f5d50; --main-soft:#e4eee9; --ok:#3d8b66; --warn:#d08a2c; --bad:#c4553f; --unk:#8a9490; --cut:#3f6aa1;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;line-height:1.55;-webkit-text-size-adjust:100%}
+.wrap{max-width:560px;margin:0 auto;padding:20px 16px 48px}
+header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;color:var(--sub);font-size:13px}
+header.top b{color:var(--main);font-size:15px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 20px;margin-bottom:14px}
+h1{font-size:25px;line-height:1.35;margin:0 0 10px;letter-spacing:-.5px}
+h2{font-size:19px;margin:0 0 6px;letter-spacing:-.3px}
+p.lead{color:var(--sub);margin:0 0 18px;font-size:15px}
+.promise{display:grid;gap:8px;margin:0 0 20px;padding:0;list-style:none}
+.promise li{background:var(--main-soft);border-radius:12px;padding:10px 12px;font-size:14px}
+.promise li::before{content:"✓ ";color:var(--main);font-weight:700}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:16px;font-size:17px;font-weight:700;
+  background:var(--main);color:#fff;cursor:pointer;font-family:inherit;text-align:center;text-decoration:none}
+.btn:active{transform:translateY(1px)}
+.btn.ghost{background:transparent;color:var(--main);border:1.5px solid var(--main)}
+.btn.small{padding:11px;font-size:15px}
+.btn[disabled]{opacity:.45;cursor:default}
+.row{margin:18px 0}
+.row:first-child{margin-top:4px}
+.q{font-weight:700;font-size:15.5px;margin-bottom:4px}
+.hint{color:var(--sub);font-size:13px;margin:-2px 0 8px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1.5px solid var(--line);background:#fff;border-radius:999px;padding:9px 14px;font-size:14.5px;cursor:pointer;
+  font-family:inherit;color:var(--ink)}
+.chip.on{border-color:var(--main);background:var(--main);color:#fff;font-weight:600}
+input.num{width:120px;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-size:16px;font-family:inherit}
+.unit{margin-left:6px;color:var(--sub)}
+.why-made{margin-top:18px;border-top:1px solid var(--line);padding-top:14px;font-size:15px}
+.why-made summary{cursor:pointer;color:var(--sub);font-weight:600}
+.why-made p{margin:10px 0 0}
+.why-made .sign{color:var(--sub);font-size:14px}
+.steps{display:flex;gap:6px;margin-bottom:14px}
+.steps span{flex:1;height:5px;border-radius:5px;background:var(--line)}
+.steps span.on{background:var(--main)}
+.nav{display:flex;gap:10px;margin-top:22px}
+.nav .btn{flex:1}
+.nav .btn.ghost{flex:0 0 32%}
+.upload{background:var(--main-soft);border-radius:14px;padding:14px;margin:14px 0 4px}
+.upload label.btn{cursor:pointer}
+.found{background:#fff;border-radius:10px;padding:10px 12px;margin-top:10px;font-size:14px}
+.found li{margin:3px 0}
+.found ul{margin:4px 0 0;padding-left:18px}
+.tip{background:#fbf7ef;border:1px dashed #e2d6bf;border-radius:12px;padding:11px 13px;font-size:13.5px;color:#5c5545;margin-top:14px}
+.tip a{color:var(--main)}
+/* 결과 */
+.scorebox{display:flex;align-items:center;gap:18px}
+.ring{--p:0;width:108px;height:108px;border-radius:50%;flex:none;display:grid;place-items:center;
+  background:conic-gradient(var(--main) calc(var(--p)*1%),var(--line) 0)}
+.ring div{width:84px;height:84px;border-radius:50%;background:#fff;display:grid;place-items:center;text-align:center}
+.ring b{font-size:27px;line-height:1}
+.ring small{display:block;font-size:11.5px;color:var(--sub)}
+.sum{font-size:15px}
+.sum .big{font-size:18px;font-weight:700;display:block;margin-bottom:4px}
+.legend{display:flex;gap:12px;flex-wrap:wrap;font-size:13px;color:var(--sub);margin:14px 0 4px}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px;vertical-align:1px}
+.item{border-top:1px solid var(--line);padding:13px 0;display:flex;gap:12px}
+.item:first-of-type{border-top:0}
+.item .bar{width:5px;border-radius:5px;flex:none}
+.item .name{font-weight:700}
+.item .state{font-size:13px;font-weight:700;margin-left:6px}
+.item .why{font-size:14px;color:var(--sub);margin-top:2px}
+.ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)} .unk{color:var(--unk)} .cut{color:var(--cut)}
+.bg-ok{background:var(--ok)} .bg-warn{background:var(--warn)} .bg-bad{background:var(--bad)} .bg-unk{background:var(--unk)} .bg-cut{background:var(--cut)}
+.prem{margin-top:14px;padding:12px 14px;border-radius:12px;background:var(--main-soft);font-size:14.5px}
+/* 설계서 */
+.plan-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:4px}
+.plan-head h2{margin:0}
+.plan-head small{color:var(--sub)}
+table.plan{width:100%;border-collapse:collapse;font-size:14.5px}
+table.plan th{text-align:left;font-size:12.5px;color:var(--sub);font-weight:600;padding:10px 4px 6px;border-bottom:1px solid var(--line)}
+table.plan td{padding:11px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+table.plan td.amt{text-align:right;white-space:nowrap;font-weight:700}
+table.plan td .why{display:block;font-size:12.5px;color:var(--sub);font-weight:400;margin-top:2px}
+.tag{display:inline-block;font-size:11.5px;border-radius:6px;padding:1px 6px;margin-right:4px;vertical-align:1px;font-weight:700}
+.tag.p1{background:#f6dcd6;color:var(--bad)} .tag.p2{background:#f7e8d1;color:#a46a1c} .tag.p3{background:#e3ebe7;color:var(--main)}
+.note{font-size:13px;color:var(--sub);margin-top:12px}
+.keep li,.check li{font-size:14px;margin:4px 0}
+.keep,.check{padding-left:18px;margin:6px 0 0}
+footer{font-size:12px;color:var(--sub);margin-top:26px;line-height:1.7}
+footer b{color:var(--ink)}
+[hidden]{display:none!important}
+@media print{.noprint{display:none!important} body{background:#fff} .card{border:0}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top"><b>내 보험 1분 점검</b><span id="agentTop"></span></header>
+
+<!-- 0. 시작 -->
+<section id="s0" class="card">
+  <h1>보험, 많이 들었는데<br>정작 필요한 건 있는지 궁금하셨죠</h1>
+  <p class="lead">몇 가지만 고르면 빈 곳과 겹친 곳을 바로 보여 드려요. 증권을 몰라도 기억나는 만큼만 고르면 됩니다.</p>
+  <ul class="promise">
+    <li>이름·전화번호를 묻지 않아요</li>
+    <li>고른 내용은 이 화면에서만 계산하고 어디에도 저장하지 않아요</li>
+    <li>병력 같은 건강 정보는 묻지 않아요</li>
+    <li>증권 사진이나 PDF가 있으면 올려서 한 번에 채울 수 있어요</li>
+  </ul>
+  <button class="btn" onclick="go(1)">점검 시작하기</button>
+  <details class="why-made">
+    <summary>이 앱을 만든 이유</summary>
+    <p>「내 보험 분석」을 검색해 봤습니다. 분석은 없고 신청서만 있었습니다. 이름을 적고, 번호를 남기고, 연락을 기다려야 내 보험을 알 수 있었습니다.</p>
+    <p>내 보험을 보는 데 내 전화번호가 필요할 이유는 없습니다. 그래서 묻지 않고, 저장하지 않고, 바로 보여 주는 점검을 만들었습니다.</p>
+    <p>결과를 보고 궁금한 게 생기면 그때 부르세요. 부르지 않으셔도 괜찮습니다.</p>
+    <p class="sign">— 메리츠화재 전속 보험설계사가 만들었습니다</p>
+  </details>
+</section>
+
+<!-- 1. 나에 대해 -->
+<section id="s1" class="card" hidden>
+  <div class="steps"><span class="on"></span><span></span><span></span></div>
+  <h2>먼저 나에 대해</h2>
+  <div class="row"><div class="q">나이</div>
+    <input class="num" id="age" type="number" inputmode="numeric" min="0" max="99" placeholder="예: 42" onkeydown="if(event.key==='Enter'){event.preventDefault();next1();}"><span class="unit">세</span>
+    <div id="ageMsg" class="hint bad" style="margin-top:6px" hidden>나이만 넣어 주세요. 나머지는 몰라도 괜찮아요.</div></div>
+  <div class="row"><div class="q">성별</div><div class="chips" data-k="sex"></div></div>
+  <div class="row"><div class="q">함께 사는 가족</div><div class="hint">해당하는 걸 모두 골라 주세요</div><div class="chips" data-k="family" data-multi="1"></div></div>
+  <div class="row"><div class="q">운전을 하시나요?</div><div class="chips" data-k="drive"></div></div>
+  <div class="row"><div class="q">우리 집 한 달 버는 돈 (세금 떼고, 부부 합쳐서)</div><div class="hint">보장 금액을 우리 집 형편에 맞추고, 보험료가 알맞은지 볼 때 써요. 고르지 않으면 같은 나이대 평균으로 잡아요.</div><div class="chips" data-k="income"></div></div>
+  <div class="row"><div class="q">지금 내는 보험료, 한 달에 모두 얼마쯤?</div>
+    <input class="num" id="premium" type="number" inputmode="numeric" min="0" placeholder="모르면 비워 두세요"><span class="unit">만 원</span></div>
+  <div class="nav"><button class="btn ghost" onclick="go(0)">이전</button><button class="btn" onclick="next1()">다음</button></div>
+</section>
+
+<!-- 2. 가진 보험 -->
+<section id="s2" class="card" hidden>
+  <div class="steps"><span class="on"></span><span class="on"></span><span></span></div>
+  <h2>지금 가진 보장</h2>
+  <p class="lead" style="margin-bottom:6px">가입한 보험을 다 합쳐서 골라 주세요. 기억 안 나면 「모름」을 누르거나 그냥 넘어가도 돼요.</p>
+  <div class="upload">
+    <div class="q">증권·가입설계서로 한 번에 채우기</div>
+    <div class="hint" style="margin-bottom:10px">사진이나 PDF를 올리면 읽어서 아래 칸을 채워 드려요. 파일은 이 기기 안에서만 읽고 어디로도 보내지 않아요. 보험이 여러 개면 보험마다 따로 올려 주세요(한 번에 고른 사진은 한 보험의 여러 쪽으로 봐요). PDF는 여러 개를 한 번에 골라도 돼요. 모두 합쳐서 봐 드려요. 보험사 앱에서 받은 PDF가 가장 정확해요.</div>
+    <label class="btn ghost small" for="file">사진·PDF 올리기</label>
+    <input id="file" type="file" accept="image/*,application/pdf" multiple hidden>
+    <div id="upStatus" class="hint" style="margin-top:10px" hidden></div>
+    <div id="pwBox" class="found" hidden>
+      <b>이 PDF는 비밀번호로 잠겨 있어요</b>
+      <div class="hint" id="pwMsg" style="margin:4px 0 8px"></div>
+      <input class="num" id="pwIn" type="password" inputmode="numeric" autocomplete="off" style="width:160px">
+      <div class="nav" style="margin-top:10px"><button type="button" class="btn ghost small" id="pwSkip">이 파일 건너뛰기</button><button type="button" class="btn small" id="pwOk">열기</button></div>
+    </div>
+    <div id="upFound" hidden></div>
+  </div>
+  <div id="covers"></div>
+  <div class="tip">가입한 보험이 하나도 기억 안 나면 <a href="https://www.credit4u.or.kr" target="_blank" rel="noopener">한국신용정보원 「내보험다보여」</a>에서 본인 인증 한 번으로 가입 내역을 무료로 볼 수 있어요.</div>
+  <div class="nav"><button class="btn ghost" onclick="go(1)">이전</button><button class="btn" onclick="showResult()">결과 보기</button></div>
+</section>
+
+<!-- 3. 결과 -->
+<section id="s3" hidden>
+  <div class="card">
+    <div class="steps"><span class="on"></span><span class="on"></span><span class="on"></span></div>
+    <div class="scorebox">
+      <div class="ring" id="ring"><div><span><b id="score">0</b><small>보장 점수</small></span></div></div>
+      <div class="sum" id="sumText"></div>
+    </div>
+    <div class="legend">
+      <span><i class="dot bg-ok"></i>충분</span><span><i class="dot bg-warn"></i>조금 부족</span>
+      <span><i class="dot bg-bad"></i>비어 있음</span><span><i class="dot bg-cut"></i>겹침·줄여도 됨</span><span><i class="dot bg-unk"></i>모름</span>
+    </div>
+  </div>
+  <div class="card" id="itemList"></div>
+  <div class="card" id="premCard" hidden></div>
+  <div class="card noprint">
+    <h2>나한테 맞춘 설계는 어떻게 생겼을까?</h2>
+    <p class="lead" style="margin-bottom:14px">지금 점검한 내용으로 설계서를 바로 만들어 보여 드려요. 보기만 해도 되고, 연락처도 묻지 않아요.</p>
+    <button class="btn" onclick="showPlan()">설계 받아보기</button>
+    <button class="btn ghost small" style="margin-top:8px" onclick="go(2)">고른 것 다시 고치기</button>
+  </div>
+</section>
+
+<!-- 4. 설계서 -->
+<section id="s4" hidden>
+  <div class="card" id="planCard"></div>
+  <div class="card noprint" id="contactCard">
+    <h2>보험료까지 정확히 보고 싶다면</h2>
+    <p class="lead" style="margin-bottom:14px">위 설계서는 보장 구성까지만 보여 드려요. 나이·직업에 따라 달라지는 실제 보험료는 담당 설계사가 회사 설계 시스템으로 뽑아 드립니다. 원할 때만 보내 주세요.</p>
+    <div id="contactBtns"></div>
+    <button class="btn ghost small" style="margin-top:8px" onclick="window.print()">설계서 저장·인쇄</button>
+    <button class="btn ghost small" style="margin-top:8px" onclick="go(3)">점검 결과로 돌아가기</button>
+  </div>
+</section>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+/* ===== 사장님이 채울 곳 ===== */
+const CONFIG = {
+  agentName: "유관기",            // 설계사 이름
+  company: "메리츠화재 전속 보험설계사",
+  regNo: "20080183090015",        // 설계사 등록번호 (e-클린보험서비스 기본정보 2026-11-23 확인)
+  phone: "01056680539",           // 문자 받을 번호 (업무폰)
+  kakao: "",                      // 카카오톡 채널·오픈채팅 주소 (없으면 비워 둠)
+  reviewNo: ""                    // 광고 심의필 번호 (받으면 넣기)
+};
+
+/* 권장 기준 (단위: 만 원) — 2026-11-23 사장님 확정
+   나이대 값 = 국가데이터처 「2025년 가계금융복지조사」 표 4-4 가구주 연령대별 2024년 가구소득 평균
+   (39세 이하 6,758 · 40대 9,333 · 50대 9,416 · 60세 이상 5,767) × 배수
+   배수: 암 = 소득 반년치, 뇌·심장 = 암의 약 2/3, 사망 = 자녀 있으면 1년 반치 · 배우자만이면 그 절반
+   60세 이상은 보험료 부담·자녀 독립을 생각해 낮춤. 소득 칸을 고르면 그 소득으로 다시 계산(나이대 위·아래 한도 안에서) */
+const BAND_NAME = ["19세 이하","39세 이하","40대","50대","60세 이상"];
+const band = a => a<20?0 : a<40?1 : a<50?2 : a<60?3 : 4;
+const RULE_TABLE = {           //  ~19   20~39  40대   50대   60~
+  cancer:      [3000, 3000,  5000,  5000,  3000],
+  brain:       [2000, 2000,  3000,  3000,  2000],
+  heart:       [2000, 2000,  3000,  3000,  2000],
+  deathChild:  [0,    10000, 15000, 15000, 5000],
+  deathSpouse: [0,    5000,  7000,  7000,  3000]
+};
+const RULE_FLOOR = {cancer:2000, brain:2000, heart:2000, deathChild:5000, deathSpouse:3000};
+const RULE_MAX   = {cancer:5000, brain:3000, heart:3000, deathChild:15000, deathSpouse:7000};
+const roundTo = (v,u) => Math.round(v/u)*u;
+function incomeYear(){ return S.income && S.income!=="u" ? +S.income*12 : null; }   // 한 달 소득 × 12
+function need(k,a){
+  const b=band(a), base=RULE_TABLE[k][b], y=incomeYear();
+  if(!y || b===0 || base===0) return base;
+  const cancer=roundTo(y*0.5,1000);
+  const raw = k==="cancer"?cancer : (k==="brain"||k==="heart")?roundTo(cancer*2/3,1000)
+            : k==="deathChild"?roundTo(y*1.5,5000) : roundTo(y*0.75,1000);
+  const cap = b===4 ? base : RULE_MAX[k];
+  return Math.min(Math.max(raw,RULE_FLOOR[k]),cap);
+}
+const RULE = {
+  cancer: a => need("cancer",a),
+  brain:  a => need("brain",a),
+  heart:  a => need("heart",a),
+  death:  (f,a) => f.includes("child") ? need("deathChild",a) : f.includes("spouse") ? need("deathSpouse",a) : 0
+};
+function ruleBasis(a){
+  if(band(a)===0) return "20~39세와 같은 금액으로";
+  return incomeYear()
+    ? (band(a)===4 ? `60세 이상 가구 평균과 우리 집 한 달 소득(세금 뗀 돈) 약 ${man(+S.income)} 가운데 낮은 쪽을 기준으로(최소 금액은 남기고)`
+                    : `우리 집 한 달 소득(세금 뗀 돈) 약 ${man(+S.income)}을 기준으로, 너무 적거나 많지 않게 위아래 한도를 두고`)
+    : `${BAND_NAME[band(a)]} 가구의 평균 소득(국가데이터처 2025년 가계금융복지조사)을 기준으로`;
+}
+
+/* ===== 고르는 칸 ===== */
+const OPTS = {
+  sex:[["m","남"],["f","여"]],
+  family:[["none","혼자"],["spouse","배우자"],["child","자녀"],["parent","부모님"]],
+  drive:[["y","해요"],["n","안 해요"]],
+  income:[["u","말하기 싫어요"],["150","200만 원 아래"],["300","200~400만 원"],["500","400~600만 원"],["700","600~800만 원"],["900","800만 원 넘게"]]
+};
+const COVERS = [
+  {k:"silson", name:"실손의료비(실비)", hint:"병원비 낸 만큼 돌려받는 보험", opts:[["0","없음"],["1","1개"],["2","2개 이상"],["u","모름"]]},
+  {k:"silsonAlone", name:"실손은 따로 든 건가요?", hint:"실손만 있는 보험인지, 건강·종합보험 안에 같이 들어 있는지", opts:[["1","따로 들었어요"],["0","다른 보험 안에 같이 있어요"],["u","모름"]], needSilson:true},
+  {k:"cancer", name:"암 진단비", hint:"암 진단 받으면 한 번에 받는 돈", opts:[["0","없음",0,0],["500","1천만 원 아래",1,999],["2000","1천~3천만 원",1000,2999],["3000","3천~5천만 원",3000,4999],["5000","5천만 원 이상",5000,1e9],["u","모름"]]},
+  {k:"brain", name:"뇌 질환 진단비", hint:"뇌출혈·뇌졸중 같은 것", opts:[["0","없음",0,0],["500","1천만 원 아래",1,999],["1500","1천~2천만 원",1000,1999],["2000","2천~3천만 원",2000,2999],["3000","3천만 원 이상",3000,1e9],["u","모름"]]},
+  {k:"heart", name:"심장 질환 진단비", hint:"심근경색·협심증 같은 것", opts:[["0","없음",0,0],["500","1천만 원 아래",1,999],["1500","1천~2천만 원",1000,1999],["2000","2천~3천만 원",2000,2999],["3000","3천만 원 이상",3000,1e9],["u","모름"]]},
+  {k:"surgery", name:"수술비", hint:"수술할 때마다 정해진 돈", opts:[["1","있음"],["0","없음"],["u","모름"]]},
+  {k:"daily", name:"입원일당·통원일당", hint:"입원·통원 하루마다 정해진 돈 (병원비와 따로 나옴)", opts:[["1","있음"],["0","없음"],["u","모름"]]},
+  {k:"liab", name:"일상생활배상책임", hint:"남의 물건·사람에게 실수로 피해 줬을 때", opts:[["1","1개"],["2","2개 이상"],["0","없음"],["u","모름"]]},
+  {k:"driver", name:"운전자보험", hint:"자동차보험과 다른, 사고 때 벌금·합의금 보장", opts:[["1","1개"],["2","2개 이상"],["0","없음"],["u","모름"]], needDrive:true},
+  {k:"death", name:"사망 보장", hint:"내가 없을 때 가족에게 가는 돈", opts:[["0","없음",0,0],["3000","5천만 원 아래",1,4999],["7000","5천만~1억",5000,9999],["10000","1억~1억 5천만 원",10000,14999],["15000","1억 5천만 원 이상",15000,1e9],["u","모름"]], needFamily:true}
+];
+
+const S = {sex:null,family:[],drive:null,income:null};
+const C = {};
+const NOTE = {};
+const WIDE = {};   // 증권에서 넓은 범위(뇌혈관질환·허혈성심장질환)로 확인한 것
+const WIDE_MSG = {
+  brain:"뇌경색까지 되는 「뇌혈관질환」 보장이라 범위는 넓어요. 금액만 채우면 돼요.",
+  heart:"협심증까지 되는 「허혈성심장질환」 보장이라 범위는 넓어요. 금액만 채우면 돼요."
+};   // 증권에서 읽은 보장 범위 메모 (예: 뇌출혈만)
+
+/* 정확한 금액(증권에서 읽은 값)을 버튼 칸에 맞춰 표시 */
+function pick(list,v){
+  if(v==null) return null;
+  if(list.some(o=>o[0]===v)) return v;
+  const n=+v, o=list.find(o=>o.length>2 && n>=o[2] && n<=o[3]);
+  return o? o[0] : v;
+}
+
+function chipRow(el, list, multi, key, store){
+  el.innerHTML = "";
+  list.forEach(([v,t])=>{
+    const b=document.createElement("button");b.type="button";b.className="chip";b.textContent=t;
+    b.onclick=()=>{
+      if(multi){
+        let a=store[key];
+        if(v==="none"){a=a.includes("none")?[]:["none"];}
+        else{a=a.filter(x=>x!=="none");a=a.includes(v)?a.filter(x=>x!==v):[...a,v];}
+        store[key]=a;
+      } else { store[key]= pick(list,store[key])===v?null:v; delete NOTE[key]; delete WIDE[key]; AUTO.delete(key); delete PREV[key]; }
+      paint(el,list,multi?store[key]:[pick(list,store[key])]);
+      if(key==="drive"||key==="family"||key==="silson") buildCovers();
+    };
+    el.appendChild(b);
+  });
+  paint(el,list,multi?store[key]:[pick(list,store[key])]);
+}
+function paint(el,list,on){[...el.children].forEach((b,i)=>{const o=on.includes(list[i][0]); b.classList.toggle("on",o); b.setAttribute("aria-pressed",o);});}
+
+document.querySelectorAll("#s1 .chips").forEach(el=>{
+  const k=el.dataset.k; chipRow(el,OPTS[k],!!el.dataset.multi,k,S);
+});
+
+function visibleCovers(){
+  return COVERS.filter(c=>{
+    if(c.needDrive && S.drive==="n") return false;
+    if(c.needSilson && !(C.silson==="1"||C.silson==="2")) return false;
+    if(c.needFamily && !(S.family.includes("spouse")||S.family.includes("child"))) return false;
+    return true;
+  });
+}
+function buildCovers(){
+  const box=document.getElementById("covers"); box.innerHTML="";
+  visibleCovers().forEach(c=>{
+    const r=document.createElement("div"); r.className="row";
+    r.innerHTML=`<div class="q">${c.name}</div><div class="hint">${c.hint}</div><div class="chips"></div>`;
+    box.appendChild(r);
+    chipRow(r.querySelector(".chips"),c.opts,false,c.k,C);
+  });
+}
+buildCovers();
+
+let CUR=0;
+function go(n, fromBack){
+  // 화면의 「이전」 버튼은 휴대폰 뒤로 가기와 똑같이 움직이게 (기록이 앞뒤로 꼬이지 않게)
+  if(!fromBack && n===CUR-1 && history.state && history.state.s===CUR){ history.back(); return; }
+  for(let i=0;i<=4;i++) document.getElementById("s"+i).hidden = i!==n;
+  if(!fromBack && n!==CUR){ if(n>CUR) history.pushState({s:n},""); else history.replaceState({s:n},""); }
+  CUR=n;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+// 휴대폰 뒤로 가기 = 앞 단계로 (앱이 닫히거나 고른 내용이 날아가지 않게)
+history.replaceState({s:0},"");
+addEventListener("popstate",e=>{
+  let n=e.state&&e.state.s!=null?e.state.s:0;
+  if(n>=2 && age()===null) n=1;                       // 나이 없이 뒤 단계로 가지 않게
+  if(n>=3){ if(!LAST.length) n=2; else { showResult(true); if(n===4) showPlan(true); } }  // 결과는 지금 고른 걸로 다시 계산
+  if(!e.state || e.state.s!==n) history.replaceState({s:n},"");
+  go(n,true);
+});
+function age(){ const v=parseInt(document.getElementById("age").value,10); return (v>=0&&v<=99)?v:null; }
+function next1(){
+  const m=document.getElementById("ageMsg");
+  if(age()===null){ m.hidden=false; document.getElementById("age").focus(); return; }
+  m.hidden=true;
+  go(2);
+}
+
+/* ===== 분석 ===== */
+const man = v => {
+  if(v>=10000){ const e=Math.floor(v/10000), r=v%10000;
+    return e+"억"+(r? " "+(r%1000===0? (r/1000)+"천만" : r.toLocaleString()+"만") : "")+" 원"; }
+  if(v>=1000 && v%1000===0) return (v/1000)+"천만 원";
+  return v.toLocaleString()+"만 원";
+};
+
+/* 손님이 버튼으로 고른 금액은 범위라 그 칸 이름 그대로, 증권에서 읽은 금액은 정확한 숫자로 */
+function haveText(k,h){
+  if(AUTO.has(k)) return man(h);
+  const c=COVERS.find(c=>c.k===k), o=c&&c.opts.find(o=>o[0]===String(h));
+  return o? o[1] : man(h);
+}
+/* 빼거나 줄여도 되는 보장 — 설계서에 붙는 짧은 이유 */
+const CUT_SHORT={
+  silson:"여러 개여도 낸 병원비 안에서 나눠 나와요. 하나만 남기면 돼요.",
+  liab:"실제로 물어 준 돈만큼만 나와요. 가족 모두 되는 「가족형」 하나면 돼요.",
+  driver:"벌금·변호사 선임비·사고 처리 지원금은 실제 든 돈만큼만 나와요. 하나면 돼요.",
+  daily:"보험료에 비해 받는 돈이 작은 편이에요. 병원비는 실손이 돌려줘요."
+};
+
+function analyze(){
+  const a=age(), fam=S.family, drive=S.drive==="y" || (S.drive!=="n" && C.driver!=null);
+  const out=[];
+  const add=(k,name,st,why,need,have,prio)=>out.push({k,name,st,why,need,have,prio, ht: have? haveText(k,have):null, exact: AUTO.has(k)});
+
+  // 실손
+  const s=C.silson;
+  if(s==="0") add("silson","실손의료비","bad","병원비를 돌려받을 곳이 없어요. 다른 보장보다 먼저 챙길 기본이에요.",null,0,1);
+  else if(s==="2") add("silson","실손의료비","cut","실손은 여러 개 있어도 실제로 낸 병원비 안에서 나눠서 나와요. 하나만 남기고 정리하면 받는 돈은 그대로, 보험료만 줄어요.",null,null,0);
+  else if(s==="1") add("silson","실손의료비","ok","병원비를 돌려받는 기본이 있어요.",null,1,0);
+  else add("silson","실손의료비","unk","있는지 꼭 확인해 보세요. 가장 기본이 되는 보험이에요.",null,null,1);
+
+  // 실손은 따로 — 형편이 어려워 다른 보험을 해지해도 실손은 남아 있게
+  if(s==="1"||s==="2"){
+    const sa=C.silsonAlone;
+    if(sa==="0") add("silsonAlone","실손 가입 방식","warn","실손이 건강·종합보험 안에 같이 들어 있어요. 형편이 어려워 그 보험을 해지하면 실손까지 함께 사라져요. 나이가 들거나 병원에 다녀온 뒤에는 실손을 다시 들기 어려울 수 있어요. 실손은 따로 들어 두는 게 안전해요. 바꾸려면 꼭 새 실손 가입이 끝난 뒤에 기존 것을 정리하세요.",null,null,2);
+    else if(sa==="1") add("silsonAlone","실손 가입 방식","ok","따로 들어 있어요. 다른 보험을 정리하게 되더라도 실손은 남아요. 이건 끝까지 지키세요.",null,null,0);
+    else add("silsonAlone","실손 가입 방식","unk","실손이 따로 든 건지, 건강·종합보험 안에 같이 있는지 확인해 보세요. 같이 있으면 그 보험을 해지할 때 실손도 함께 사라져요.",null,null,3);
+  }
+
+  // 진단비 3종
+  [["cancer","암 진단비",RULE.cancer(a),"치료비보다 일을 쉬는 동안 끊기는 생활비가 더 걱정이에요. 그래서 버는 돈에 맞춰 잡아요."],
+   ["brain","뇌 질환 진단비",RULE.brain(a),"「뇌출혈」만 되는 보험이 많아요. 뇌경색까지 되는 「뇌혈관질환」인지 같이 봐야 해요."],
+   ["heart","심장 질환 진단비",RULE.heart(a),"「급성심근경색」만 되는 보험이 많아요. 협심증까지 되는 「허혈성심장질환」인지 같이 봐야 해요."]
+  ].forEach(([k,name,need,why])=>{
+    const v=C[k], nt=NOTE[k];
+    if(v==="u"||v==null) add(k,name,"unk","얼마짜리인지 모르면 증권에서 금액만 확인해 보세요. "+why,need,null,2);
+    else{
+      const h=+v;
+      if(h===0) add(k,name,"bad","비어 있어요. "+why,need,0,1);
+      else if(h<need) add(k,name,"warn",`지금 ${haveText(k,h)} 있어요. 나에게 맞춘 기준 ${man(need)}보다 적어요. `+(nt||WIDE[k]&&WIDE_MSG[k]||why),need,h,2);
+      else if(nt) add(k,name,"warn",`금액(${haveText(k,h)})은 넉넉해요. `+nt,need,null,2);
+      else add(k,name,"ok",`${man(need)} 기준을 채웠어요.`,need,h,0);
+    }
+  });
+
+  // 수술비
+  const sg=C.surgery;
+  add("surgery","수술비", sg==="1"?"ok":sg==="0"?"bad":"unk",
+      sg==="1"?"수술할 때 받을 돈이 있어요.":"실손이 병원비를 메워 줘도, 수술 뒤 쉬는 동안 쓸 돈은 따로예요.", null, null, sg==="0"?2:3);
+
+  // 입원·통원 일당 — 실손이 있으면 줄일 후보
+  const dl=C.daily, hasSil=s==="1"||s==="2";
+  if(dl==="1") add("daily","입원일당·통원일당", hasSil?"cut":"ok",
+      hasSil?"입원·통원 하루에 몇만 원씩 나오는 일당은 보험료에 비해 받는 돈이 작은 편이에요. 병원비는 실손이 돌려주니, 보험료를 줄일 때 가장 먼저 볼 후보예요."
+            :"있어요. 실손이 없으면 병원 갈 때 보탬이 돼요. 실손을 들게 되면 그때 줄일지 다시 보면 돼요.", null,null,0);
+
+  // 일상배상
+  const lb=C.liab;
+  if(lb==="2") add("liab","일상생활배상책임","cut","일상생활배상책임은 실제로 물어 준 돈 안에서만 나와요. 두 개 있어도 두 배로 받지 않으니, 가족 모두 되는 「가족형」 하나만 남기면 돼요.",null,null,0);
+  else add("liab","일상생활배상책임", lb==="1"?"ok":lb==="0"?"bad":"unk",
+      lb==="1"?"이미 있어요. 가족 모두 되는 「가족형」인지만 확인해 보세요.":"아이가 남의 집 물건을 깨거나, 우리 집 물이 아랫집에 샐 때 쓰여요. 보험료가 아주 적은 편이에요.", null,null, lb==="0"?2:3);
+
+  // 운전자
+  if(drive){
+    const d=C.driver;
+    if(d==="2") add("driver","운전자보험","cut","운전자보험의 벌금·변호사 선임비·교통사고 처리 지원금은 실제로 든 돈 안에서 나눠서 나와요. 두 개 있어도 더 받지 않으니 하나면 충분해요.",null,null,0);
+    else add("driver","운전자보험", d==="1"?"ok":d==="0"?"bad":"unk",
+        d==="1"?"있어요. 오래전 가입이면 지금 법에 맞게 금액이 올라갔는지 한 번 볼 만해요.":"자동차보험은 상대방 피해를 막아 주고, 내 벌금·합의금·변호사비는 운전자보험이 맡아요.", null,null, d==="0"?2:3);
+  }
+
+  // 사망
+  const needD=RULE.death(fam,a);
+  const dv=C.death, dh=(dv==null||dv==="u")? null : +dv;
+  const accOnly=!!NOTE.death;   // 증권에서 상해사망만 보임
+  if(needD>0 && accOnly && dh>0){
+    add("death","질병사망 보장","warn",`사망 보장 ${haveText("death",dh)}은 상해로 사망할 때만 나와요. 병으로 사망하면 나오지 않으니, 질병사망 보장이 있는지 같이 봐야 해요.`,needD,null,3);
+  } else if(needD>0){
+    if(dh===null) add("death","사망 보장","unk","가족이 있으면 「내가 없을 때 가족이 한동안 버틸 돈」이 있는지 봐 두면 좋아요.",needD,null,3);
+    else if(dh<needD) add("death","사망 보장",dh===0?"bad":"warn",(dh? `지금 ${haveText("death",dh)} 있어요. ` : "비어 있어요. ")+`가족이 있으면 ${man(needD)}쯤을 기준으로 잡았어요. 내가 없어도 남은 가족이 한동안 생활을 이어 갈 수 있게요.`,needD,dh,dh===0?2:3);
+    else if(dh>=needD*2 && dh>=10000){ add("death","사망 보장","cut",`지금 ${haveText("death",dh)} 있어요. 기준 ${man(needD)}의 두 배가 넘어요. 보험료가 부담되면 줄여도 되는 후보예요.`,null,null,0); out[out.length-1].cs="기준의 두 배가 넘어요. 보험료가 부담되면 줄일 후보예요."; }
+    else add("death","사망 보장","ok","가족을 위한 기준을 채웠어요.",needD,dh,0);
+  } else if(a>=20 && dh>=3000 && AUTO.has("death") && !accOnly){   // 사망 칸이 숨은 상태라 증권에서 읽은 값만 씀
+    add("death","사망 보장","cut",`지금 ${haveText("death",dh)} 있어요. 함께 사는 배우자·자녀가 없으면 큰 사망 보장은 받을 사람이 마땅치 않아요. 부모님께 남길 게 아니라면 장례비 정도만 남기고 줄여도 되는 후보예요.`,null,null,0); out[out.length-1].cs="받을 배우자·자녀가 없어요. 장례비 정도만 남겨도 돼요.";
+  }
+  return out;
+}
+
+const W={silson:3,silsonAlone:1,cancer:3,brain:2,heart:2,surgery:1,liab:1,driver:1,death:1,daily:0};
+function scoreOf(list){
+  let got=0,tot=0;
+  list.forEach(x=>{
+    if(x.st==="unk") return;
+    const w=W[x.k]; tot+=w;
+    got+= (x.st==="ok"||x.st==="cut")?w : x.st==="warn"?w*0.5 : 0;   // 빼도 되는 건 보장은 있는 것
+  });
+  return tot? Math.round(got/tot*100) : null;
+}
+
+let LAST=[];
+function showResult(noNav){
+  LAST=analyze();
+  const sc=scoreOf(LAST);
+  const cnt=t=>LAST.filter(x=>x.st===t).length;
+  document.getElementById("score").textContent= sc===null?"-":sc;
+  document.getElementById("ring").style.setProperty("--p", sc||0);
+  const tied=LAST.some(x=>x.k==="silsonAlone"&&x.st==="warn");
+  const bad=cnt("bad"),warn=cnt("warn")-(tied?1:0),unk=cnt("unk"),ok=cnt("ok"),cut=cnt("cut");
+  let head;
+  if(sc===null) head="고른 게 거의 없어서 점수는 못 냈어요";
+  else if(bad===0&&warn===0&&tied) head="빈 곳은 없고, 실손만 따로 챙기면 돼요";
+  else if(bad===0&&warn===0&&cut) head="빈 곳은 없고, 줄여도 되는 곳이 보여요";
+  else if(bad===0&&warn===0) head="기본은 잘 갖춰 두셨어요";
+  else if(bad+warn<=2) head="거의 다 됐고, 한두 곳만 비어요";
+  else head="꼭 필요한 곳 몇 군데가 비어 있어요";
+  document.getElementById("sumText").innerHTML=
+    `<span class="big">${head}</span>충분 ${ok} · 부족 ${warn} · 빈 곳 ${bad}${tied?" · 실손 묶임":""}${cut?` · 줄일 곳 ${cut}`:""}${unk?` · 모름 ${unk}`:""}`;
+
+  const label={ok:"충분",warn:"조금 부족",bad:"비어 있음",unk:"모름",cut:"줄여도 됨"};
+  const DUP={silson:1,liab:1,driver:1};   // 겹쳐서 하나만 남기면 되는 것
+  const order={bad:0,warn:1,cut:2,unk:3,ok:4};
+  const sorted=[...LAST].sort((a,b)=>order[a.st]-order[b.st]);
+  document.getElementById("itemList").innerHTML="<h2 style='margin-bottom:6px'>하나씩 보면</h2>"+sorted.map(x=>
+    `<div class="item"><span class="bar bg-${x.st}"></span><div><span class="name">${x.name}</span><span class="state ${x.st}">${x.st==="cut"&&DUP[x.k]?"겹침": x.k==="silsonAlone"&&x.st==="warn"?"묶여 있음": label[x.st]}</span><div class="why">${x.why}</div></div></div>`
+  ).join("");
+
+  // 보험료 비율
+  const p=parseFloat(document.getElementById("premium").value);
+  const inc=S.income && S.income!=="u" ? +S.income : null;
+  const pc=document.getElementById("premCard");
+  if(p>0 && inc){
+    const r=p/inc*100;
+    let msg;
+    if(r>12) msg=`버는 돈의 약 ${r.toFixed(0)}%를 보험료로 내고 계세요. 흔히 8~10%를 알맞은 선으로 봐요. 보장을 줄이지 않고 겹친 것만 정리해도 줄어드는 경우가 많아요.`;
+    else if(r>=5) msg=`버는 돈의 약 ${r.toFixed(0)}%를 보험료로 내고 계세요. 알맞은 범위예요. 금액보다 빈 곳이 있는지가 더 중요해요.`;
+    else msg=`버는 돈의 약 ${r.toFixed(0)}%를 보험료로 내고 계세요. 부담은 적은 편이니, 빈 곳만 채워도 든든해질 수 있어요.`;
+    pc.innerHTML=`<h2>보험료는 알맞을까</h2><div class="prem">${msg}</div>`; pc.hidden=false;
+  } else pc.hidden=true;
+  if(!noNav) go(3);
+}
+
+/* ===== 설계서 ===== */
+function showPlan(noNav){
+  const a=age(), list=LAST;
+  const cut=list.filter(x=>x.st==="cut");
+  const fill=list.filter(x=>x.st==="bad"||x.st==="warn").sort((x,y)=>x.prio-y.prio);
+  const unk=list.filter(x=>x.st==="unk");
+  const keep=list.filter(x=>x.st==="ok");
+  const today=new Date(); const d=`${today.getFullYear()}.${today.getMonth()+1}.${today.getDate()}`;
+  const sexT=S.sex==="m"?"남":S.sex==="f"?"여":"";
+  const pt={1:["p1","먼저"],2:["p2","다음"],3:["p3","여유 되면"]};
+
+  const planRow=x=>{
+    let what, amt;
+    if(x.k==="silson"&&x.st==="bad"){what="실손의료비 1개 (따로)";amt="가입";}
+    else if(x.k==="silsonAlone"){what="실손 따로 들기";amt="단독으로";}
+    else if(x.need){what=x.name;amt= !x.have? man(x.need) : x.exact? "+"+man(x.need-x.have) : man(x.need)+"까지";}
+    else {what=x.name; amt="가입";}
+    const [c,t]=pt[Math.min(Math.max(x.prio,1),3)];
+    const reason = x.have&&x.need ? `지금 ${x.ht} → ${man(x.need)}` : shortWhy(x.k);
+    return `<tr><td><span class="tag ${c}">${t}</span>${what}<span class="why">${reason}</span></td><td class="amt">${amt}</td></tr>`;
+  };
+
+  let html=`<div class="plan-head"><h2>나만의 보장 설계서</h2><small>${d}</small></div>
+    <div class="note" style="margin:6px 0 4px">${a}세 ${sexT} · 점검 결과를 바탕으로 자동으로 만든 구성이에요</div>`;
+  if(fill.length){
+    html+=`<table class="plan"><tr><th>더하면 좋은 보장</th><th style="text-align:right">권장 금액</th></tr>${fill.map(planRow).join("")}</table>`;
+  } else {
+    html+=`<p style="margin:14px 0">${cut.length? "새로 더할 곳은 없어요. 대신 아래처럼 정리하면 받는 보장은 그대로 두고 보험료를 아낄 수 있어요." : "고른 내용으로는 새로 더할 곳이 보이지 않아요. 지금 보험을 잘 유지하시면 돼요."}</p>`;
+  }
+  if(cut.length) html+=`<div style="margin-top:16px;font-weight:700">겹치거나 줄여도 되는 보장</div><ul class="keep">${cut.map(x=>`<li><b>${x.name}</b> — ${x.cs||CUT_SHORT[x.k]}</li>`).join("")}</ul>
+    <p class="note" style="margin-top:6px">빼기 전에: 보험을 통째로 해지하지 말고, 그 특약만 빼거나 금액을 줄이는 방법을 먼저 확인하세요. 해지하고 새로 가입하면 가입이 거절되거나 보험료가 오를 수 있어요.</p>`;
+  if(keep.length) html+=`<div style="margin-top:16px;font-weight:700">그대로 두면 되는 보장</div><ul class="keep">${keep.map(x=>`<li>${x.name}</li>`).join("")}</ul>`;
+  if(unk.length) html+=`<div style="margin-top:14px;font-weight:700">증권에서 확인해 볼 것</div><ul class="check">${unk.map(x=>`<li>${x.name}${x.k==="silsonAlone"?" — 실손만 따로 든 보험인지": x.need?` — 금액이 ${man(x.need)} 넘는지`:" — 있는지"}</li>`).join("")}</ul>`;
+  html+=`<p class="note">권장 금액은 ${ruleBasis(a)} 잡은 출발점이에요. 실제 보장 내용과 지급 조건은 상품 약관을 따르고, 보험료는 나이·직업·건강 상태에 따라 달라져요.</p>`;
+  document.getElementById("planCard").innerHTML=html;
+
+  // 연락 버튼
+  const sum=`[보장 설계 문의]\n${a}세 ${sexT}\n` + (fill.length? fill.map(x=>"- "+x.name+(x.need&&x.have?` (지금 ${x.ht})`:"")).join("\n") : "- 새로 더할 곳 없음, 점검만")
+    + (cut.length? "\n줄일 곳: "+cut.map(x=>x.name).join(", ") : "");
+  let b="";
+  if(CONFIG.phone){
+    b+=`<a class="btn" href="sms:${CONFIG.phone}?&body=${encodeURIComponent(sum+"\n\n보험료 알려 주세요.")}">이 설계서로 보험료 문자로 받기</a>`;
+  }
+  if(CONFIG.kakao){
+    b+=`<a class="btn ghost" style="margin-top:8px" href="${CONFIG.kakao}" target="_blank" rel="noopener">카카오톡으로 물어보기</a>`;
+  }
+  if(!b) b=`<button class="btn" disabled>상담 연결 준비 중이에요</button>`;
+  document.getElementById("contactBtns").innerHTML=b;
+  if(!noNav) go(4);
+}
+function shortWhy(k){
+  return {silsonAlone:"다른 보험을 해지해도 실손은 남게",silson:"병원비를 돌려받는 기본",surgery:"수술 뒤 쉬는 동안 쓸 돈",liab:"실수로 남에게 준 피해",driver:"벌금·합의금·변호사비"}[k]||"";
+}
+
+/* ===== 증권·설계서 읽기 (모두 기기 안에서) ===== */
+const LIB = {
+  pdf: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js",
+  pdfWorker: "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js",
+  ocr: "https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js"
+};
+const LOADING={};
+function loadScript(src){
+  if(LOADING[src]) return LOADING[src];
+  return LOADING[src]=new Promise((res,rej)=>{
+    const s=document.createElement("script"); s.src=src; s.onload=res;
+    s.onerror=()=>{ s.remove(); delete LOADING[src]; rej(new Error("load "+src)); }; // 실패하면 다음에 다시 받게 함
+    document.head.appendChild(s);
+  });
+}
+
+/* 한 줄에서 금액들을 만 원 단위로 꺼냄: 3,000만원 / 3천만원 / 2백만원 / 1억5천만원 / 30,000,000원
+   설명 속 금액(「5백만원(가입금액의 50%)」, 「100만원 한도」)은 가입금액이 아니라서 뺌 */
+function amountsIn(line){
+  // 글자 인식에서 가는 「1」이 빠져 「천만원」만 남는 일이 잦아, 숫자 없는 「천만원·백만원·억원」은 1로 봄
+  line=line.replace(/(^|[^\d,.])(?=(천만|백만|억)원)/g,(m,p)=>p+"1");
+  const re=/(\d[\d,]*(?:\.\d+)?)(억|천만|백만|만|원)원?/g, unit={억:10000,천만:1000,백만:100,만:1,원:1/10000};
+  const out=[]; let m, prev=null;
+  while((m=re.exec(line))){
+    const v=parseFloat(m[1].replace(/,/g,""))*unit[m[2]];
+    if(prev && prev.u==="억" && m.index===prev.end){ prev.v+=v; prev.end=re.lastIndex; prev.u=m[2]; continue; }
+    prev={v,end:re.lastIndex,u:m[2]}; out.push(prev);
+  }
+  return out.filter(o=>!/^(\(|한도|씩|이상|이하|초과|미만|까지|\/)/.test(line.slice(o.end)))
+            .map(o=>Math.round(o.v)).filter(v=>v>0 && v<=200000);
+}
+
+/* 담보 이름 줄인지: 이름 끝말(진단비·수술비…)이 있고, 설명 문장(보험기간 중…, ※, -)이 아닌 짧은 줄 */
+const HEAD=/진단비|수술비|치료비|(상해|질병|일반)사망|사망보험금|후유장해|배상책임|의료비|입원일당|입원비|벌금|변호사선임|교통사고처리/;
+function isHead(L){
+  return HEAD.test(L) && L.length<=70
+    && !/^(보험기간|암보장개시|계약일|최초|※|\*|-|·|└|ㄴ|\d+\)|[①-⑳]|주\d)/.test(L)
+    && !/경우|지급|합니다|됩니다|입니다|수익자|지정|변경/.test(L);
+}
+const cleanName=L=>L.replace(/^\d{1,3}(?=[가-힣(])/,"")
+  // 증권 왼쪽 칸 구분 글자(기본·수술·3대진단…)가 이름 앞에 붙어 읽힌 것 떼기
+  .replace(/^(기본계약|기본|선택계약|사망후유|3대진단|대진단|진단|수술|치료비)(?!비)(?=.)/,(m,_,o,all)=>HEAD.test(all.slice(m.length))?"":m)
+  .replace(/^[┗└ㄴ]/,"└ ").replace(/\((통합)?간편가입\)|\[기본계약\]/g,"")
+  .replace(/(세부보장|\d{4}-\d{2}-\d{2}|\d[\d,]*(억|천만|백만|만)?원).*$/,"");
+
+/* 증권 글자를 담보 묶음으로 나눠 읽기 — 메리츠처럼 금액이 이름 줄이 아니라 오른쪽 칸 가운데 있는 양식도 잡기 위해
+   「담보 이름 줄 ~ 다음 담보 이름 줄 전」을 한 묶음으로 보고 그 안의 가입금액을 씀 */
+function readCoverage(text){
+  const r={silson:false,daily:false,cancer:0,brainWide:0,brainNarrow:0,heartWide:0,heartNarrow:0,surgery:false,liab:false,driver:false,death:0,deathDisease:false,items:{},seen:{}};
+  const lines=text.split(/\n/).map(x=>x.replace(/\s+/g,"")).filter(Boolean);
+  const pn=text.match(/증권\s*번\s*호\s*[:：]?\s*([A-Z0-9][A-Z0-9-]{5,})(?![A-Za-z0-9])/); if(pn) r.policyNo=pn[1].toUpperCase();
+  for(let i=0;i<lines.length;i++){
+    const L=lines[i];
+    if(/실손|실비|(입원|통원|질병|상해)의료비/.test(L) && !/중복|비례|청구|안내/.test(L)) r.silson=true;
+    if(/(입원|통원)일당/.test(L) && !/경우|지급|합니다/.test(L)) r.daily=true;
+    if(!isHead(L)) continue;
+    let amt=Math.max(0,...amountsIn(L));
+    for(let j=i+1;j<lines.length && j<=i+15 && !isHead(lines[j]);j++) amt=Math.max(amt,...amountsIn(lines[j]));
+    const name=cleanName(L);
+    if(amt>0 && name && !/세부보장/.test(L)) r.items[name]=Math.max(r.items[name]||0,amt);
+    const mark=k=>{ r.seen[k]=true; };
+    const Lx=L.replace(/[(\[][^)\]]*제외[^)\]]*[)\]]/g,"").replace(/유사암제외/g,""); // 「(유사암 제외)」는 빼고 봄
+    // 통합암진단비처럼 암 종류별로 나뉜 담보는 한 번 걸리면 그중 하나만 나오므로 더하지 않고 큰 값만 씀
+    if(/암/.test(Lx) && /진단비/.test(Lx) && !/유사암|소액암|갑상선|제자리|경계성|기타피부|대장점막|전립선/.test(Lx)){ r.cancer=Math.max(r.cancer,amt); mark("cancer"); }
+    if(/진단비/.test(L)){
+      if(/뇌혈관|뇌졸중/.test(L)){ r.brainWide=Math.max(r.brainWide,amt); mark("brain"); }
+      else if(/뇌출혈/.test(L)){ r.brainNarrow=Math.max(r.brainNarrow,amt); mark("brain"); }
+      if(/허혈성|협심증/.test(L)){ r.heartWide=Math.max(r.heartWide,amt); mark("heart"); }
+      else if(/심근경색/.test(L)){ r.heartNarrow=Math.max(r.heartNarrow,amt); mark("heart"); }
+    }
+    if(/수술비/.test(L)) r.surgery=true;
+    if(/일상(생활)?배상|일배책/.test(L)) r.liab=true;   // 화재·임대인·시설소유자 배상책임은 다른 보장
+    if(/교통사고처리|변호사선임|벌금/.test(L)) r.driver=true;
+    if(/사망/.test(L) && !/후유|장해/.test(L)){ r.death=Math.max(r.death,amt); mark("death"); if(!/상해/.test(L)) r.deathDisease=true; }
+  }
+  return r;
+}
+
+/* 잠긴 PDF: 비밀번호를 화면에서 받아 기기 안에서만 씀 (어디로도 보내지 않음) */
+function askPassword(name, wrong){
+  const box=document.getElementById("pwBox"), inp=document.getElementById("pwIn");
+  document.getElementById("pwMsg").textContent = wrong
+    ? "비밀번호가 맞지 않아요. 다시 넣어 주세요."
+    : `「${name}」을 열려면 비밀번호가 필요해요. 보험사 증권은 보통 생년월일 6자리(주민번호 앞자리)예요. 넣은 번호는 이 기기에서 파일을 여는 데만 쓰고 저장하거나 보내지 않아요.`;
+  inp.value=""; box.hidden=false; inp.focus();
+  return new Promise(res=>{
+    const done=v=>{ box.hidden=true; ok.onclick=skip.onclick=inp.onkeydown=null; res(v); };
+    const ok=document.getElementById("pwOk"), skip=document.getElementById("pwSkip");
+    ok.onclick=()=>{ if(inp.value.trim()) done(inp.value); };
+    skip.onclick=()=>done(null);
+    inp.onkeydown=e=>{ if(e.key==="Enter"){ e.preventDefault(); ok.onclick(); } };
+  });
+}
+async function openPdf(file, say){
+  const buf=await file.arrayBuffer();
+  let pw;
+  for(;;){
+    try{
+      // pdf.js가 넘긴 데이터를 비워 버리므로 매번 복사본을 줌
+      return await pdfjsLib.getDocument({data:new Uint8Array(buf.slice(0)), password:pw}).promise;
+    }catch(e){
+      if(e && e.name==="PasswordException"){
+        say(`${file.name} 비밀번호 기다리는 중`);
+        pw=await askPassword(file.name, e.code===2);
+        if(pw===null){ const x=new Error("skip"); x.skip=true; throw x; }
+        continue;
+      }
+      throw e;
+    }
+  }
+}
+
+async function pdfText(file, say){
+  await loadScript(LIB.pdf);
+  // 읽기 도구를 화면 쪽에 직접 올려 둠 — 별도 작업 공간(worker)을 막는 곳(앱 안 브라우저·미리보기 창)에서도 읽히게
+  try{ await loadScript(LIB.pdfWorker); }catch(e){ console.warn(e); } // 못 받으면 pdf.js가 알아서 다른 길로 읽음
+  pdfjsLib.GlobalWorkerOptions.workerSrc=LIB.pdfWorker;
+  const doc=await openPdf(file, say);
+  let all="", scans=[];
+  for(let i=1;i<=doc.numPages;i++){
+    say(`${file.name} ${i}/${doc.numPages}쪽 읽는 중`);
+    const page=await doc.getPage(i), tc=await page.getTextContent();
+    // 같은 높이(y)에 있는 글자를 한 줄로 묶음
+    const rows=new Map();
+    tc.items.forEach(it=>{ const y=Math.round(it.transform[5]/3); (rows.get(y)||rows.set(y,[]).get(y)).push(it); });
+    const txt=[...rows.entries()].sort((a,b)=>b[0]-a[0]).map(([,its])=>its.sort((a,b)=>a.transform[4]-b.transform[4]).map(t=>t.str).join(" ")).join("\n");
+    if(txt.replace(/\s/g,"").length<30){ // 글자가 없는 스캔 PDF → 그림으로 바꿔 글자 인식
+      const vp=page.getViewport({scale:2}), cv=document.createElement("canvas");
+      cv.width=vp.width; cv.height=vp.height;
+      await page.render({canvasContext:cv.getContext("2d"),viewport:vp}).promise;
+      scans.push(cv);
+    } else all+=txt+"\n";
+  }
+  for(const cv of scans) all+=await ocrText(cv, say, file.name)+"\n";
+  return all;
+}
+
+/* 글자 인식 전에 손보기: 크기를 맞추고, 보험사 물결무늬(분홍·빨강)를 지우고, 흑백으로 */
+async function cleanImage(src){
+  const bmp = src instanceof HTMLCanvasElement ? src : await createImageBitmap(src);
+  const k = Math.min(3, Math.max(1, 2200/bmp.width));
+  const cv=document.createElement("canvas"); cv.width=Math.round(bmp.width*k); cv.height=Math.round(bmp.height*k);
+  const g=cv.getContext("2d",{willReadFrequently:true}); g.imageSmoothingQuality="high"; g.drawImage(bmp,0,0,cv.width,cv.height);
+  const im=g.getImageData(0,0,cv.width,cv.height), d=im.data;
+  for(let i=0;i<d.length;i+=4){
+    const r=d[i],gg=d[i+1],b=d[i+2];
+    let v = (r-gg>45 && r-b>30) ? 255 : (0.3*r+0.59*gg+0.11*b);  // 붉은 기 도는 점은 지움
+    v = v<170 ? 0 : 255;
+    d[i]=d[i+1]=d[i+2]=v;
+  }
+  g.putImageData(im,0,0);
+  return cv;
+}
+
+let OCR=null;
+async function ocrText(img, say, name){
+  await loadScript(LIB.ocr);
+  if(!OCR){
+    say("글자 읽는 도구 준비 중 (처음 한 번만 조금 걸려요)");
+    OCR=await Tesseract.createWorker("kor",1,{logger:m=>{ if(m.status==="recognizing text") say(`${name} 글자 읽는 중 ${Math.round(m.progress*100)}%`); }});
+  }
+  const {data}=await OCR.recognize(await cleanImage(img));
+  return data.text;
+}
+
+/* 올린 증권들 — 하나씩 더 올려도 쌓이고, 목록에서 ✕로 뺄 수 있음 */
+const READS=[]; let readSeq=0;
+const AUTO=new Set();   // 증권에서 읽어 채운 칸 (손님이 직접 누르면 빠짐)
+const PREV={};          // 증권이 덮어쓰기 전에 손님이 직접 골라 둔 값 — 증권을 빼면 되돌림
+
+document.getElementById("file").addEventListener("change", async e=>{
+  const files=[...e.target.files]; e.target.value="";
+  if(!files.length) return;
+  const st=document.getElementById("upStatus");
+  const say=t=>{ st.hidden=false; st.textContent=t; };
+  const failed=[]; const skipped=[];
+  const fin=document.getElementById("file"), lab=document.querySelector('label[for="file"]');
+  fin.disabled=true; lab.style.opacity=.45; lab.style.pointerEvents="none"; // 읽는 동안 새 파일 막기
+  const photoTexts=[], photoNames=[];
+  for(const f of files){
+    try{
+      const isPdf=f.type==="application/pdf"||/\.pdf$/i.test(f.name);
+      if(isPdf){
+        const text=await pdfText(f,say);
+        READS.push({id:++readSeq, name:f.name, r:readCoverage(text)});
+      } else { photoTexts.push(await ocrText(f,say,f.name)); photoNames.push(f.name); }
+    }catch(err){ if(err&&err.skip) skipped.push(f.name); else { console.error(err); failed.push(`${f.name} (${whyFail(err)})`); } }
+  }
+  // 한 번에 고른 사진들은 한 증권의 여러 쪽으로 보고 합쳐 읽음
+  if(photoTexts.length) READS.push({id:++readSeq, name: photoNames.length>1?`사진 ${photoNames.length}장`:photoNames[0], r:readCoverage(photoTexts.join("\n"))});
+  st.hidden=true;
+  fin.disabled=false; lab.style.opacity=""; lab.style.pointerEvents="";
+  lab.textContent = READS.length ? "다른 증권 더 올리기" : "사진·PDF 올리기";
+  applyRead(combine(READS), failed, skipped);
+});
+
+/* 증권번호가 같은 것(같은 보험을 두 번 올림)은 더하지 않고 하나로 */
+function combine(list){
+  const g=new Map();
+  list.forEach(x=>{
+    const key=x.r.policyNo||("#"+x.id);
+    if(!g.has(key)){ g.set(key, JSON.parse(JSON.stringify(x.r))); return; }
+    const a=g.get(key), b=x.r;
+    for(const k in b){
+      if(typeof b[k]==="number") a[k]=Math.max(a[k],b[k]);
+      else if(typeof b[k]==="boolean") a[k]=a[k]||b[k];
+      else if(k==="items") for(const n in b.items) a.items[n]=Math.max(a.items[n]||0,b.items[n]);
+      else if(k==="seen") Object.assign(a.seen,b.seen);
+    }
+  });
+  return [...g.values()];
+}
+function removeRead(id){
+  const i=READS.findIndex(x=>x.id===id); if(i>=0) READS.splice(i,1);
+  document.querySelector('label[for="file"]').textContent = READS.length ? "다른 증권 더 올리기" : "사진·PDF 올리기";
+  applyRead(combine(READS), [], []);
+}
+
+function whyFail(e){
+  const m=String(e&&e.message||e);
+  if(/^load /.test(m)) return "읽기 도구를 받지 못함";
+  if(/Invalid PDF|InvalidPDF|structure/i.test(m)) return "PDF 파일이 깨졌거나 PDF가 아님";
+  return m.slice(0,60);
+}
+
+/* 여러 증권을 합침: 진단비·사망은 더하고, 실손은 몇 개인지 셈 */
+function applyRead(per, failed, skipped=[]){
+  const fd=document.getElementById("upFound");
+  const got=[], all=[];
+  AUTO.forEach(k=>{ delete NOTE[k]; delete WIDE[k];
+    if(k in PREV){ if(PREV[k]==null) delete C[k]; else C[k]=PREV[k]; delete PREV[k]; } else delete C[k]; });
+  AUTO.clear();
+  const set=(k,v)=>{ if(!(k in PREV)) PREV[k]=C[k]; C[k]=v; AUTO.add(k); };
+  if(per.length){
+    const sum=k=>per.reduce((a,r)=>a+r[k],0);
+    const sil=per.filter(r=>r.silson).length;
+    if(sil){ set("silson", sil>=2?"2":"1");
+      const alone=per.some(r=>r.silson && !(r.cancer||r.brainWide||r.brainNarrow||r.heartWide||r.heartNarrow||r.death||r.surgery
+        ||r.daily||r.liab||r.driver||Object.keys(r.seen).length));
+      set("silsonAlone", alone?"1":"0");
+      got.push(`실손의료비 ${sil}개${alone?" (따로 든 실손 있음)":" (다른 보험 안에 같이 있음)"}`); }
+    const ca=sum("cancer"); if(ca){ set("cancer",String(ca)); got.push(`암 진단비 ${man(ca)}`); }
+    [["brain","뇌",`증권에서 「뇌출혈」 진단비만 보여요. 뇌경색까지 되는 「뇌혈관질환」 진단비는 비어 있을 수 있어요.`],
+     ["heart","심장",`증권에서 「급성심근경색」 진단비만 보여요. 협심증까지 되는 「허혈성심장질환」 진단비는 비어 있을 수 있어요.`]]
+    .forEach(([k,t,msg])=>{
+      const w=sum(k+"Wide"), n=sum(k+"Narrow");
+      if(w||n){ set(k,String(w+n)); if(!w){ NOTE[k]=msg; delete WIDE[k]; } else { delete NOTE[k]; WIDE[k]=true; }
+        got.push(`${t} 질환 진단비 ${man(w+n)}${w?"":` (${k==="brain"?"뇌출혈":"급성심근경색"}만)`}`); }
+    });
+    if(per.some(r=>r.surgery)){ set("surgery","1"); got.push("수술비 있음"); }
+    const nl=per.filter(r=>r.liab).length, nd=per.filter(r=>r.driver).length;
+    if(nl){ set("liab", nl>=2?"2":"1"); got.push(`일상생활배상책임 ${nl}개`); }
+    if(nd){ set("driver", nd>=2?"2":"1"); got.push(`운전자보험 ${nd}개`); }
+    if(per.some(r=>r.daily)){ set("daily","1"); got.push("입원·통원 일당 있음"); }
+    const de=sum("death");
+    delete NOTE.death;
+    if(de){ set("death",String(de));
+      if(!per.some(r=>r.deathDisease)) NOTE.death="상해로 사망할 때만 나오는 보장이에요. 병으로 사망하면 나오지 않아요."; else delete NOTE.death;
+      got.push(`사망 보장 ${man(de)}${NOTE.death?" (상해사망만)":""}`); }
+    // 담보 이름은 찾았는데 금액을 못 읽은 것 — 칸은 비워 두고 알려 줌
+    const sumOf={cancer:"cancer",brain:["brainWide","brainNarrow"],heart:["heartWide","heartNarrow"],death:"death"};
+    const lab={cancer:"암 진단비",brain:"뇌 질환 진단비",heart:"심장 질환 진단비",death:"사망 보장"};
+    Object.keys(sumOf).forEach(k=>{
+      const tot=[].concat(sumOf[k]).reduce((a,x)=>a+sum(x),0);
+      if(!tot && per.some(r=>r.seen[k])) got.push(`${lab[k]} 있음 — 금액은 못 읽었어요. 아래에서 골라 주세요`);
+    });
+    per.forEach(r=>Object.entries(r.items).forEach(([n,v])=>all.push([n,v])));
+  }
+  let h="";
+  if(READS.length) h+=`<div class="found"><b>올린 증권 ${READS.length}개</b><ul style="list-style:none;padding:0">${READS.map(x=>
+    `<li style="display:flex;justify-content:space-between;gap:8px;align-items:center"><span>${x.name.replace(/</g,"&lt;")}</span><button type="button" class="chip" style="padding:3px 10px" onclick="removeRead(${x.id})" aria-label="빼기">✕</button></li>`).join("")}</ul>
+    ${per.length<READS.length?`<div class="hint" style="margin:4px 0 0">증권번호가 같은 파일은 같은 보험으로 보고 한 번만 셌어요.</div>`:""}</div>`;
+  if(got.length) h+=`<div class="found"><b>증권에서 찾은 보장</b><ul>${got.map(g=>`<li>${g}</li>`).join("")}</ul>
+    <div class="hint" style="margin:8px 0 0">아래 칸에 채워 두었어요. 잘못 읽은 곳은 버튼을 눌러 고쳐 주세요. 못 찾은 보장은 직접 골라 주세요.</div>
+    ${all.length?`<details style="margin-top:8px"><summary style="cursor:pointer;color:var(--main)">증권에서 읽은 담보 ${all.length}개 모두 보기</summary><ul>${all.map(([n,v])=>`<li>${n.replace(/</g,"&lt;")} — ${man(v)}</li>`).join("")}</ul></details>`:""}</div>`;
+  else if(per.length) h+=`<div class="found">글자는 읽었는데 보장 이름을 찾지 못했어요. 「가입 담보」나 「보장 내용」이 나온 쪽을 밝은 곳에서 반듯하게 찍어 다시 올려 주세요. 아래에서 직접 골라도 돼요.</div>`;
+  if(skipped.length) h+=`<div class="found">비밀번호를 넣지 않아 건너뛴 파일: ${skipped.join(", ")}</div>`;
+  if(failed.length) h+=`<div class="found">읽지 못한 파일: ${failed.map(x=>x.replace(/</g,"&lt;")).join(", ")}. 인터넷 연결을 확인하고 다시 올려 주세요. 그래도 안 되면 증권 화면을 사진으로 찍어 올려도 돼요.</div>`;
+  fd.innerHTML=h; fd.hidden=!h;
+  buildCovers();
+}
+
+/* ===== 홈 화면 앱 (PWA) ===== */
+if("serviceWorker" in navigator && location.protocol==="https:") navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+/* ===== 아래 안내 ===== */
+(function(){
+  const n=CONFIG.agentName;
+  document.getElementById("agentTop").textContent = n? `${n} 설계사` : "";
+  document.getElementById("foot").innerHTML =
+   `이 점검은 고른 내용만으로 계산한 참고 자료예요. 고른 내용은 저장되지 않아요.<br>`+
+   `실제 보장 여부와 지급 조건은 가입한 상품의 약관을 따릅니다.<br>`+
+   `보험계약을 맺기 전에 상품설명서와 약관을 꼭 읽어 보세요.<br>`+
+   `지금 있는 보험을 해지하고 새로 가입하면 가입이 거절되거나, 보험료가 오르거나, 보장 내용이 달라질 수 있어요.<br>`+
+   `갱신형 보험은 갱신할 때 보험료가 오를 수 있어요.<br>`+
+   (n||CONFIG.regNo ? `<b>${n||""}</b> ${CONFIG.company}${CONFIG.regNo?` · 등록번호 ${CONFIG.regNo}`:""}<br>`:"")+
+   (CONFIG.reviewNo? `심의필 ${CONFIG.reviewNo}<br>`:"")+
+   `<a href="privacy.html" style="color:inherit">개인정보 처리방침</a>`;
+})();
+</script>
+</body>
+</html>
