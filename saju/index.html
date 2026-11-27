@@ -272,7 +272,7 @@
   </footer>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.8/lunar.js"></script>
+<script src="lunar.js"></script>
 <script src="saju.js?v=20261127"></script>
 <script src="texts.js?v=20261127c"></script>
 <script>
@@ -939,6 +939,10 @@
     if (x) openMe(x.input, x.id, 'today'); else drawPeople();
   })();
 })();
+</script>
+<script>
+  // 홈 화면·앱으로 쓸 때 인터넷이 약해도 열리게 (화면 파일만 저장, 생년월일은 안 다룸)
+  if ('serviceWorker' in navigator) window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
 </script>
 </body>
 </html>
