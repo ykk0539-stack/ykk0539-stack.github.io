@@ -26,6 +26,7 @@
 {"@type":"Question","name":"밤 11시 반 넘어서 태어났으면 날짜가 바뀌나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요."}},
 {"@type":"Question","name":"태어난 곳은 왜 물어보나요?","acceptedAnswer":{"@type":"Answer","text":"사주의 시간은 시계 시간이 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서 서울은 실제 해 시간보다 약 32분 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요."}},
 {"@type":"Question","name":"입력한 생년월일은 어디에 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요."}},
+{"@type":"Question","name":"왜 안 좋은 말도 나오나요?","acceptedAnswer":{"@type":"Answer","text":"좋은 말만 하는 풀이는 듣기엔 편해도 도움이 안 돼요. 팔자한장은 타고난 장점과 함께 성격의 그늘, 돈이 새는 곳, 연애에서 부딪히는 곳을 쓴소리로 돌려 말하지 않고 적어요. 다만 병이나 사고처럼 맞힐 수 없는 일을 정해진 운명처럼 말하지는 않아요."}},
 {"@type":"Question","name":"정말 전부 무료인가요?","acceptedAnswer":{"@type":"Answer","text":"네. 가입, 전화번호, 결제 없이 내 사주·오늘의 운세·궁합을 모두 볼 수 있어요."}}
 ]}
 </script>
@@ -132,6 +133,15 @@
   .pair .p b { display: block; font: 900 26px/1.2 var(--serif); }
   .pair .heart { color: var(--red); font-size: 22px; }
 
+  /* 쓴소리 — 좋은 말 다음에 붙는 약한 면 */
+  .bitter { margin-top: 14px; padding: 12px 14px; border-radius: 12px; background: #2a221c; color: #f3ebe0; }
+  .bitter .lab { display: inline-block; font-size: 12.5px; font-weight: 800; padding: 2px 9px; border-radius: 99px; background: var(--red); color: #fff; margin-bottom: 6px; }
+  .bitter p { margin: 6px 0 0; font-size: 15px; line-height: 1.7; }
+  .bitter b { color: #fff; }
+  .card.bitter-card { background: #2a221c; color: #f3ebe0; border-color: #2a221c; }
+  .card.bitter-card h2 { color: #fff; }
+  .card.bitter-card h3 { color: #f0b9a8; }
+  .card.bitter-card .muted { color: #b8aa9c; }
   .notes { font-size: 13px; color: var(--sub); background: var(--paper); border-radius: 12px; padding: 10px 12px; margin-top: 12px; }
   .notes p { margin: 0 0 4px; }
   .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
@@ -194,6 +204,8 @@
       <p>사주의 시간은 시계가 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서, 서울은 실제 해 시간보다 32분쯤 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요. 1987·1988년 여름에 있었던 서머타임도 빼고 계산해요.</p></details>
     <details><summary>입력한 생년월일은 어디에 저장되나요?</summary>
       <p>저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요.</p></details>
+    <details><summary>왜 안 좋은 말도 나오나요?</summary>
+      <p>좋은 말만 하는 풀이는 듣기엔 편해도 도움이 안 돼요. 팔자한장은 타고난 장점과 함께 성격의 그늘, 돈이 새는 곳, 연애에서 부딪히는 곳을 쓴소리로 돌려 말하지 않고 적어요. 다만 병이나 사고처럼 맞힐 수 없는 일을 정해진 운명처럼 말하지는 않아요.</p></details>
     <details><summary>정말 전부 무료인가요?</summary>
       <p>네. 가입, 전화번호, 결제 없이 내 사주·오늘의 운세·궁합을 모두 볼 수 있어요.</p></details>
   </section>
@@ -309,6 +321,10 @@
     }).join('') + '</div>';
   }
 
+  function bitter(lines, label) {
+    return '<div class="bitter"><span class="lab">' + (label || '쓴소리') + '</span>' + lines.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>';
+  }
+
   function stars(n) {
     n = Math.max(1, Math.min(5, n));
     return '★★★★★'.slice(0, n) + '<span class="off">' + '★★★★★'.slice(0, 5 - n) + '</span>';
@@ -331,6 +347,7 @@
     return '<div class="card today fade"><div class="muted">' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + gzKo + '(' + td.gz + ')일 · ' + esc(name) + '의 하루</div>' +
       '<div class="stars">' + stars(td.score) + '</div><div class="title">' + td.t.title + '</div>' +
       '<p>' + td.t.text + '</p>' + (T.TODAY_ZHI[td.rel] ? '<p class="muted">' + T.TODAY_ZHI[td.rel] + '</p>' : '') +
+      '<div style="text-align:left">' + bitter([T.TODAY_DARK[td.god]], '오늘 피할 것') + '</div>' +
       '<div class="lucky"><div>행운의 색<b>' + td.lucky.color + '</b></div><div>좋은 방향<b>' + td.lucky.dir + '</b></div><div>행운의 숫자<b>' + td.lucky.num + '</b></div></div>' +
       '<p class="muted" style="margin-top:12px">오늘 기운이 나에게 ' + ro(td.god) + ' 들어와요. 행운의 색은 내 사주에 부족한 ' + S.EL[td.minEl] + '(' + S.EL_HANJA[td.minEl] + ') 기운이에요.</p></div>';
   }
@@ -338,17 +355,25 @@
   function renderMe(r, input) {
     var I = T.ILGAN[r.dayGan];
     var name = input.name ? input.name + '님' : '당신';
-    var many = [], none = [];
-    r.count.forEach(function (n, i) { if (n >= 3) many.push(T.EL_MANY[i]); if (n === 0) none.push(T.EL_NONE[i]); });
-    var gs = [], gn = [];
-    r.groups.forEach(function (n, i) { if (n >= 3) gs.push(T.GROUP_STRONG[i]); if (n === 0) gn.push(T.GROUP_NONE[i]); });
+    var D = T.DARK[r.dayGan];
+    var many = [], none = [], elDark = [];
+    r.count.forEach(function (n, i) {
+      if (n >= 3) { many.push(T.EL_MANY[i]); elDark.push(T.EL_MANY_DARK[i]); }
+      if (n === 0) { none.push(T.EL_NONE[i]); elDark.push(T.EL_NONE_DARK[i]); }
+    });
+    var gs = [], gn = [], grDark = [];
+    r.groups.forEach(function (n, i) {
+      if (n >= 3) { gs.push(T.GROUP_STRONG[i]); grDark.push(T.GROUP_STRONG_DARK[i]); }
+      if (n === 0) { gn.push(T.GROUP_NONE[i]); grDark.push(T.GROUP_NONE_DARK[i]); }
+    });
     var y1 = S.yearGanzhi(THIS_YEAR), y2 = S.yearGanzhi(THIS_YEAR + 1);
     var g1 = S.tenGod(r.dayGan, y1.charAt(0)), g2 = S.tenGod(r.dayGan, y2.charAt(0));
     var cur = -1;
     r.daeun.forEach(function (du, i) { if (THIS_YEAR >= du.year) cur = i; });
     var daeunHTML = r.daeun.length ? '<div class="daeun">' + r.daeun.map(function (du, i) {
       return '<div class="du' + (i === cur ? ' now' : '') + '"><div class="age">' + du.age + '세~</div><div class="gz">' + du.gz + '</div><div class="g">' + du.ko + ' · ' + du.god + '</div>' + (i === cur ? '<div class="g" style="color:var(--red);font-weight:700">지금</div>' : '') + '</div>';
-    }).join('') + '</div>' + (cur >= 0 ? '<p style="margin-top:10px"><span class="tag">지금 대운</span>' + r.daeun[cur].ko + ' 대운 · ' + T.DAEUN[S.GROUP[r.daeun[cur].god]] + '</p>' : '') : '<p class="muted">대운을 계산하지 못했어요.</p>';
+    }).join('') + '</div>' + (cur >= 0 ? '<p style="margin-top:10px"><span class="tag">지금 대운</span>' + r.daeun[cur].ko + ' 대운 · ' + T.DAEUN[S.GROUP[r.daeun[cur].god]] + '</p>' +
+      bitter([T.DAEUN_DARK[S.GROUP[r.daeun[cur].god]] + '. ' + r.daeun[cur].ko + ' 대운 동안 이 점을 먼저 조심하세요.']) : '') : '<p class="muted">대운을 계산하지 못했어요.</p>';
 
     var html =
       '<div class="card hero fade"><div class="who">' + esc(name) + '의 사주 · 양력 ' + r.solar.y + '년 ' + r.solar.m + '월 ' + r.solar.d + '일 (음력 ' + (r.lunar.y !== r.solar.y ? r.lunar.y + '년 ' : '') + (r.lunar.leap ? '윤' : '') + r.lunar.m + '월 ' + r.lunar.d + '일)생 ' + r.animal + '띠</div>' +
@@ -359,6 +384,15 @@
       '<div class="card fade"><h2>타고난 성향</h2><p>' + I.nature + '</p>' +
       '<h3>일과 재능</h3><p>' + I.work + '</p><h3>사랑과 관계</h3><p>' + I.love + '</p><h3>이것만 조심하면</h3><p>' + I.care + '</p></div>' +
 
+      '<div class="card bitter-card fade"><h2>쓴소리 — 듣기 싫어도 맞는 말</h2>' +
+      '<p class="muted">좋은 말만 하는 풀이는 도움이 안 돼요. ' + I.name + '의 약한 곳을 돌려 말하지 않고 적었어요.</p>' +
+      '<h3>성격의 그늘</h3><p>' + D.self + '</p>' +
+      '<h3>돈이 새는 곳</h3><p>' + D.money + '</p>' +
+      '<h3>연애에서 부딪히는 곳</h3><p>' + D.love + '</p>' +
+      '<h3>사람 사이에서 잃는 것</h3><p>' + D.people + '</p>' +
+      (elDark.length || grDark.length ? '<h3>내 사주 짜임에서 보이는 약점</h3>' + elDark.concat(grDark).map(function (t) { return '<p>' + t + '</p>'; }).join('') : '') +
+      '</div>' +
+
       '<div class="card fade"><h2>오행 — 내 안의 다섯 기운</h2>' + barsHTML(r.count) +
       '<div style="margin-top:14px">' + (many.concat(none).map(function (t) { return '<p>' + t + '</p>'; }).join('') || '<p>다섯 기운이 비교적 고르게 있어요. 한쪽으로 치우치지 않아 상황에 따라 유연하게 움직이는 힘이 있어요.</p>') + '</div>' +
       '<p class="muted">여덟 글자(시간을 모르면 여섯 글자)의 겉 기운만 센 거예요.</p></div>' +
@@ -366,8 +400,8 @@
       ((gs.length || gn.length) ? '<div class="card fade"><h2>사주 속 나의 무기</h2>' + gs.concat(gn).map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' : '') +
 
       '<div class="card fade"><h2>' + THIS_YEAR + '년 · ' + (THIS_YEAR + 1) + '년 운</h2>' +
-      '<h3><span class="tag">' + THIS_YEAR + ' ' + y1 + '</span>' + g1 + '의 해</h3><p>' + T.YEAR[g1] + '</p>' +
-      '<h3><span class="tag">' + (THIS_YEAR + 1) + ' ' + y2 + '</span>' + g2 + '의 해</h3><p>' + T.YEAR[g2] + '</p></div>' +
+      '<h3><span class="tag">' + THIS_YEAR + ' ' + y1 + '</span>' + g1 + '의 해</h3><p>' + T.YEAR[g1] + '</p>' + bitter([T.YEAR_DARK[g1]]) +
+      '<h3><span class="tag">' + (THIS_YEAR + 1) + ' ' + y2 + '</span>' + g2 + '의 해</h3><p>' + T.YEAR[g2] + '</p>' + bitter([T.YEAR_DARK[g2]]) + '</div>' +
 
       '<div class="card fade"><h2>10년마다 바뀌는 큰 흐름 (대운)</h2>' + daeunHTML +
       '<p class="muted" style="margin-top:8px">옆으로 밀면 더 볼 수 있어요. 나이는 대운이 시작되는 나이예요.</p></div>' +
@@ -407,7 +441,11 @@
       '<div class="card fade"><h2>' + m.title + '</h2><p>' + m.text + '</p>' +
       (T.MATCH_ZHI[zr] ? '<p>' + T.MATCH_ZHI[zr] + '</p>' : '') +
       '<p class="muted">' + esc(an) + ' ' + a.animal + '띠 · ' + esc(bn) + ' ' + b.animal + '띠. ' + T.MATCH_TTI[tr] + '</p></div>' +
-      '<div class="card fade"><h2>서로를 이해하는 한 줄</h2><p><b>' + esc(an) + '</b> — ' + IA.love + '</p><p><b>' + esc(bn) + '</b> — ' + IB.love + '</p></div>';
+      '<div class="card fade"><h2>서로를 이해하는 한 줄</h2><p><b>' + esc(an) + '</b> — ' + IA.love + '</p><p><b>' + esc(bn) + '</b> — ' + IB.love + '</p></div>' +
+      '<div class="card bitter-card fade"><h2>쓴소리 — 이 둘이 부딪히는 곳</h2>' +
+      '<p>' + T.MATCH_EL_DARK[rel] + '</p>' + (T.MATCH_ZHI_DARK[zr] ? '<p>' + T.MATCH_ZHI_DARK[zr] + '</p>' : '') +
+      '<h3>' + esc(an) + '의 연애 약점</h3><p>' + T.DARK[a.dayGan].love + '</p>' +
+      '<h3>' + esc(bn) + '의 연애 약점</h3><p>' + T.DARK[b.dayGan].love + '</p></div>';
   }
 
   function share() {
