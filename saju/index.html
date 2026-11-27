@@ -25,7 +25,7 @@
 {"@type":"Question","name":"음력 생일로 넣어도 되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 음력을 고르고 날짜를 넣으면 양력으로 바꿔서 계산해요. 거꾸로 양력을 넣으면 음력 생일을 바로 알려 드려요. 윤달에 태어났다면 윤달이에요에 표시해 주세요."}},
 {"@type":"Question","name":"밤 11시 반 넘어서 태어났으면 날짜가 바뀌나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요."}},
 {"@type":"Question","name":"태어난 곳은 왜 물어보나요?","acceptedAnswer":{"@type":"Answer","text":"사주의 시간은 시계 시간이 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서 서울은 실제 해 시간보다 약 32분 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요."}},
-{"@type":"Question","name":"입력한 생년월일은 어디에 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요."}},
+{"@type":"Question","name":"입력한 생년월일은 어디에 남나요?","acceptedAnswer":{"@type":"Answer","text":"서버로는 보내지 않아요. 계산은 휴대폰 브라우저 안에서만 해요. 「이 휴대폰에 기억해 두기」를 켜 두면 이 휴대폰 브라우저 안에만 남아서 다음에 열면 바로 보여요. 맨 위 「저장된 사람」에서 ×를 두 번 누르면 지워지고, 끄고 보면 아무것도 남지 않아요."}},
 {"@type":"Question","name":"2027년 신년운세는 언제부터 맞나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 한 해가 양력 1월 1일이 아니라 입춘(2027년은 2월 4일)에 시작해요. 그래서 2027년 1월 1일부터 2월 3일까지는 아직 2026년 병오년 기운이고, 2월 4일부터 정미년 기운이에요. 달마다 운세도 입춘부터 1월로 셉니다."}},
 {"@type":"Question","name":"2027년 삼재는 무슨 띠인가요?","acceptedAnswer":{"@type":"Answer","text":"2027년 정미년은 돼지띠·토끼띠·양띠가 날삼재예요. 2025년에 들어온 삼재가 끝나는 해예요. 호랑이띠·말띠·개띠는 2028~2030년, 뱀띠·닭띠·소띠는 2031~2033년, 원숭이띠·쥐띠·용띠는 2034~2036년이 삼재예요. 삼재는 조심할 때라는 옛 풀이라서 겁낼 필요는 없어요."}},
 {"@type":"Question","name":"왜 안 좋은 말도 나오나요?","acceptedAnswer":{"@type":"Answer","text":"좋은 말만 하는 풀이는 듣기엔 편해도 도움이 안 돼요. 팔자한장은 타고난 장점과 함께 성격의 그늘, 돈이 새는 곳, 연애에서 부딪히는 곳을 쓴소리로 돌려 말하지 않고 적어요. 다만 병이나 사고처럼 맞힐 수 없는 일을 정해진 운명처럼 말하지는 않아요."}},
@@ -144,6 +144,17 @@
   .card.bitter-card h2 { color: #fff; }
   .card.bitter-card h3 { color: #f0b9a8; }
   .card.bitter-card .muted { color: #b8aa9c; }
+  /* 저장된 사람 */
+  .people { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; margin-top: 14px; }
+  .people .ptitle { font-size: 12.5px; color: var(--sub); margin-right: 2px; }
+  .pchip { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: 99px; background: var(--card); overflow: hidden; }
+  .pchip button { font: 600 13.5px/1 inherit; font-family: inherit; border: 0; background: transparent; color: var(--ink); padding: 9px 10px; cursor: pointer; }
+  .pchip button.x { color: var(--sub); padding: 9px 10px 9px 2px; font-size: 15px; }
+  .pchip button.x.sure { color: var(--red); font-size: 12.5px; font-weight: 800; }
+  .pchip.on { background: var(--ink); border-color: var(--ink); }
+  .pchip.on button { color: #fff; }
+  .pchip.add { border-style: dashed; }
+  .saved-pick { display: flex; flex-wrap: wrap; gap: 6px; margin: 0 0 12px; }
   /* 띠별 삼재 표 */
   .sj { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
   .sj th { font-size: 12.5px; color: var(--sub); font-weight: 700; text-align: center; padding: 6px 2px; border-bottom: 1px solid var(--line); }
@@ -191,6 +202,7 @@
     <ul class="trust">
       <li>가입·전화번호 없음</li><li>정보는 휴대폰 안에서만</li><li>전부 무료</li>
     </ul>
+    <div class="people" id="people" hidden></div>
   </header>
 
   <nav class="tabs" role="tablist">
@@ -213,6 +225,7 @@
     <div class="card">
       <h2>상대방 태어난 날</h2>
       <p class="muted">위에 넣은 내 정보와 상대방 정보를 같이 봐요.</p>
+      <div id="you-saved"></div>
       <form id="f-you" autocomplete="off"></form>
     </div>
     <div id="out-match"></div>
@@ -230,8 +243,8 @@
       <p>사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요.</p></details>
     <details><summary>태어난 곳은 왜 물어보나요?</summary>
       <p>사주의 시간은 시계가 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서, 서울은 실제 해 시간보다 32분쯤 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요. 1987·1988년 여름에 있었던 서머타임도 빼고 계산해요.</p></details>
-    <details><summary>입력한 생년월일은 어디에 저장되나요?</summary>
-      <p>저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요.</p></details>
+    <details><summary>입력한 생년월일은 어디에 남나요?</summary>
+      <p>서버로는 보내지 않아요. 계산은 휴대폰 브라우저 안에서만 해요. 「이 휴대폰에 기억해 두기」를 켜 두면 이 휴대폰 브라우저 안에만 남아서 다음에 열면 바로 보여요. 맨 위 「저장된 사람」에서 ×를 두 번 누르면 지워지고, 끄고 보면 아무것도 남지 않아요.</p></details>
     <details><summary>2027년 신년운세는 언제부터 맞나요?</summary>
       <p>사주에서는 한 해가 양력 1월 1일이 아니라 입춘(2027년은 2월 4일)에 시작해요. 그래서 2027년 1월 1일부터 2월 3일까지는 아직 2026년 병오년 기운이고, 2월 4일부터 정미년 기운이에요. 달마다 운세도 입춘부터 1월로 셉니다.</p></details>
     <details><summary>2027년 삼재는 무슨 띠인가요?</summary>
@@ -245,7 +258,7 @@
   <footer>
     팔자한장의 풀이는 전통 명리학의 기본 원리로 계산한 <b>재미와 참고용 글</b>이에요.<br>
     중요한 결정은 사주보다 지금의 내 상황을 먼저 봐 주세요.<br>
-    입력한 정보는 저장되지 않고, 휴대폰 밖으로 보내지 않아요.<br>
+    입력한 정보는 휴대폰 밖으로 보내지 않아요. 기억해 두기를 켜면 이 휴대폰에만 남아요.<br>
     <a href="privacy.html" style="color:inherit">개인정보 처리방침</a>
   </footer>
 </div>
@@ -287,6 +300,7 @@
       '<label class="f">태어난 시간</label><div class="row"><select id="' + id + '-h">' + hours + '</select><select id="' + id + '-mi">' + mins + '</select></div>' +
       '<label class="check"><input type="checkbox" id="' + id + '-nt">태어난 시간을 몰라요</label>' +
       '<label class="f" for="' + id + '-p">태어난 곳</label><select id="' + id + '-p">' + places + '</select>' +
+      '<label class="check"><input type="checkbox" id="' + id + '-save" checked>이 휴대폰에 기억해 두기 <span class="muted">(서버로 안 보내요)</span></label>' +
       '<div class="err" id="' + id + '-err"></div>' +
       '<button class="btn" type="submit">' + (id === 'me' ? '내 사주 보기' : '궁합 보기') + '</button>';
   }
@@ -324,7 +338,8 @@
     if (err) return null;
     var place = S.PLACES[+g('p').value];
     return { name: g('name').value.trim(), gender: $('input[name="' + id + '-g"]:checked').value, calendar: cal, leap: g('leap').checked,
-      y: y, m: m, d: d, timeKnown: !g('nt').checked, h: +g('h').value, mi: +g('mi').value, lng: place[1], trueSolar: true };
+      y: y, m: m, d: d, timeKnown: !g('nt').checked, h: +g('h').value, mi: +g('mi').value, p: +g('p').value, lng: place[1], trueSolar: true,
+      save: g('save').checked, who: id };
   }
 
   function safeCompute(input, errEl) {
@@ -440,8 +455,8 @@
       '<div class="card fade"><h2>10년마다 바뀌는 큰 흐름 (대운)</h2>' + daeunHTML +
       '<p class="muted" style="margin-top:8px">옆으로 밀면 더 볼 수 있어요. 나이는 대운이 시작되는 나이예요.</p></div>' +
 
-      '<div class="card fade" style="text-align:center"><p style="margin-bottom:4px">결과를 저장하고 싶으면 화면을 캡처해 두세요.</p>' +
-      '<button class="btn ghost" id="share">팔자한장 친구에게 알려 주기</button><button class="btn ghost" id="again" style="margin-top:8px">다른 생년월일로 다시 보기</button></div>';
+      '<div class="card fade" style="text-align:center"><p style="margin-bottom:4px">' + (meId ? '이 휴대폰에 기억해 뒀어요. 다음에 열면 바로 보여요.' : '결과를 남기고 싶으면 화면을 캡처해 두세요.') + '</p>' +
+      '<button class="btn ghost" id="share">팔자한장 친구에게 알려 주기</button><button class="btn ghost" id="again" style="margin-top:8px">다른 사람 사주 보기</button></div>';
     $('#out-me').innerHTML = html;
     $('#out-ny').innerHTML = nyHTML(r, name);
     $('#out-today').innerHTML = todayHTML(r, name) +
@@ -599,28 +614,122 @@
     b.addEventListener('click', function () { show(b.dataset.tab); window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); });
   });
 
+
+  // ---------- 이 휴대폰에 기억하기 (localStorage, 서버로 보내지 않음) ----------
+  var STORE = 'palja.people.v1', meId = null;
+  var KEYS = ['name', 'gender', 'calendar', 'leap', 'y', 'm', 'd', 'timeKnown', 'h', 'mi', 'p'];
+  function loadPeople() {
+    try { var d = JSON.parse(localStorage.getItem(STORE) || '{}'); return { list: d.list || [], last: d.last || null }; }
+    catch (e) { return { list: [], last: null }; }
+  }
+  function savePeople(P) { try { localStorage.setItem(STORE, JSON.stringify(P)); } catch (e) { /* 저장 못 하는 브라우저면 그냥 넘어감 */ } }
+  function clean(input) { var o = { who: input.who }; KEYS.forEach(function (k) { o[k] = input[k]; }); return o; }
+  function samePerson(a, b) { return KEYS.every(function (k) { return a[k] === b[k]; }); }
+  function remember(input) {
+    var P = loadPeople(), c = clean(input), hit = P.list.filter(function (x) { return samePerson(x.input, c); })[0];
+    var id = hit ? hit.id : 'p' + Date.now().toString(36);
+    if (!hit) { P.list.push({ id: id, input: c }); if (P.list.length > 12) P.list.shift(); }
+    if (input.who === 'me') P.last = id;
+    savePeople(P);
+    return id;
+  }
+  function forget(id) {
+    var P = loadPeople();
+    P.list = P.list.filter(function (x) { return x.id !== id; });
+    if (P.last === id) P.last = null;
+    savePeople(P);
+  }
+  function findPerson(id) { return loadPeople().list.filter(function (x) { return x.id === id; })[0]; }
+  function label(inp) {
+    return esc(inp.name || (inp.who === 'me' ? '나' : '상대')) + ' · ' + (inp.calendar === 'lunar' ? '음 ' : '') + String(inp.y).slice(2) + '.' + inp.m + '.' + inp.d;
+  }
+  function withLng(inp) { var o = {}; for (var k in inp) o[k] = inp[k]; o.lng = S.PLACES[inp.p] ? S.PLACES[inp.p][1] : 127; o.trueSolar = true; return o; }
+
+  function drawPeople() {
+    var P = loadPeople(), box = $('#people');
+    box.hidden = !P.list.length;
+    box.innerHTML = P.list.length ? '<span class="ptitle">저장된 사람</span>' + P.list.map(function (x) {
+      return '<span class="pchip' + (x.id === meId ? ' on' : '') + '"><button type="button" data-act="pick" data-id="' + x.id + '">' + label(x.input) + '</button>' +
+        '<button type="button" class="x" data-act="del" data-id="' + x.id + '" aria-label="지우기">×</button></span>';
+    }).join('') + '<span class="pchip add"><button type="button" data-act="new">+ 새로 보기</button></span>' : '';
+    var others = P.list.filter(function (x) { return x.id !== meId; });
+    $('#you-saved').innerHTML = others.length ? '<p class="muted" style="margin:10px 0 6px">저장된 사람과 바로 보기</p><div class="saved-pick">' + others.map(function (x) {
+      return '<span class="pchip"><button type="button" data-act="match" data-id="' + x.id + '">' + label(x.input) + '</button></span>';
+    }).join('') + '</div>' : '';
+  }
+
+  function openMe(input, id, toTab) {
+    var r = safeCompute(withLng(input), $('#me-err')); if (!r) return false;
+    me = r; meInput = input; meId = id;
+    renderMe(r, input);
+    $('#out-match').innerHTML = '';
+    drawPeople();
+    show(toTab || tab);
+    return true;
+  }
+  function newPerson() {
+    me = null; meInput = null; meId = null;
+    wire('me');
+    drawPeople();
+    show('me');
+    $('#form-card').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  $('#people').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    var act = b.dataset.act, id = b.dataset.id;
+    if (act === 'new') return newPerson();
+    if (act === 'pick') {
+      var x = findPerson(id);
+      if (x) { var P = loadPeople(); P.last = id; savePeople(P); openMe(x.input, id); window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); }
+      return;
+    }
+    if (act === 'del') {
+      if (!b.classList.contains('sure')) {   // 한 번 더 눌러야 지움 (실수 방지)
+        b.classList.add('sure'); b.textContent = '지우기';
+        setTimeout(function () { if (b.isConnected) { b.classList.remove('sure'); b.textContent = '×'; } }, 3000);
+        return;
+      }
+      forget(id);
+      if (id === meId) meId = null;
+      drawPeople();
+    }
+  });
+  $('#you-saved').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b || b.dataset.act !== 'match') return;
+    var x = findPerson(b.dataset.id); if (!x || !me) return;
+    var r = safeCompute(withLng(x.input), $('#you-err')); if (!r) return;
+    renderMatch(me, meInput, r, x.input);
+    $('#out-match').scrollIntoView({ behavior: 'smooth' });
+  });
+
   $('#samjae-all').innerHTML = samjaeHTML(null);
   wire('me'); wire('you');
   $('#f-me').addEventListener('submit', function (e) {
     e.preventDefault();
     var i = readForm('me'); if (!i) return;
-    var r = safeCompute(i, $('#me-err')); if (!r) return;
-    me = r; meInput = i;
-    renderMe(r, i);
-    show(tab);
+    if (!safeCompute(i, $('#me-err'))) return;
+    var id = i.save ? remember(i) : null;
+    if (!openMe(i, id)) return;
     setTimeout(function () { window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); }, 30);
-    $('#out-match').innerHTML = '';
   });
   $('#f-you').addEventListener('submit', function (e) {
     e.preventDefault();
     var i = readForm('you'); if (!i) return;
     var r = safeCompute(i, $('#you-err')); if (!r) return;
+    if (i.save) { remember(i); drawPeople(); }
     renderMatch(me, meInput, r, i);
     $('#out-match').scrollIntoView({ behavior: 'smooth' });
   });
   document.addEventListener('click', function (e) {
-    if (e.target && e.target.id === 'again') { me = null; show('me'); $('#form-card').scrollIntoView({ behavior: 'smooth' }); }
+    if (e.target && e.target.id === 'again') newPerson();
   });
+
+  // 다시 열었을 때: 마지막으로 본 사람의 오늘 운세부터
+  (function () {
+    var P = loadPeople(), x = P.last && findPerson(P.last);
+    if (x) openMe(x.input, x.id, 'today'); else drawPeople();
+  })();
 })();
 </script>
 </body>
