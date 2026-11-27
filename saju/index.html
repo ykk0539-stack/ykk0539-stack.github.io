@@ -3,14 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>팔자한장 — 내 팔자, 한 장에 정리 | 무료 사주·오늘의 운세·궁합</title>
-<meta name="description" content="생년월일만 넣으면 사주팔자 원국, 오행, 타고난 성향, 올해 운, 10년 대운, 오늘의 운세, 궁합까지 한 장에. 가입·전화번호 없이 무료, 입력한 정보는 휴대폰 밖으로 나가지 않아요.">
+<title>팔자한장 — 내 팔자, 한 장에 정리 | 무료 사주·2027 신년운세·궁합</title>
+<meta name="description" content="생년월일만 넣으면 사주팔자 원국, 오행, 타고난 성향, 2027 정미년 신년운세와 달마다 운세, 삼재, 10년 대운, 오늘의 운세, 궁합까지 한 장에. 가입·전화번호 없이 무료, 입력한 정보는 휴대폰 밖으로 나가지 않아요.">
 <link rel="canonical" href="https://ykk0539-stack.github.io/saju/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="팔자한장">
 <meta property="og:url" content="https://ykk0539-stack.github.io/saju/">
 <meta property="og:title" content="팔자한장 — 내 팔자, 한 장에 정리">
-<meta property="og:description" content="생년월일만 넣으면 내 사주가 한 장에. 오늘의 운세·궁합까지 무료.">
+<meta property="og:description" content="생년월일만 넣으면 내 사주가 한 장에. 2027 신년운세·오늘의 운세·궁합까지 무료.">
 <meta property="og:image" content="https://ykk0539-stack.github.io/saju/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -26,6 +26,8 @@
 {"@type":"Question","name":"밤 11시 반 넘어서 태어났으면 날짜가 바뀌나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요."}},
 {"@type":"Question","name":"태어난 곳은 왜 물어보나요?","acceptedAnswer":{"@type":"Answer","text":"사주의 시간은 시계 시간이 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서 서울은 실제 해 시간보다 약 32분 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요."}},
 {"@type":"Question","name":"입력한 생년월일은 어디에 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요."}},
+{"@type":"Question","name":"2027년 신년운세는 언제부터 맞나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 한 해가 양력 1월 1일이 아니라 입춘(2027년은 2월 4일)에 시작해요. 그래서 2027년 1월 1일부터 2월 3일까지는 아직 2026년 병오년 기운이고, 2월 4일부터 정미년 기운이에요. 달마다 운세도 입춘부터 1월로 셉니다."}},
+{"@type":"Question","name":"2027년 삼재는 무슨 띠인가요?","acceptedAnswer":{"@type":"Answer","text":"2027년 정미년은 돼지띠·토끼띠·양띠가 날삼재예요. 2025년에 들어온 삼재가 끝나는 해예요. 호랑이띠·말띠·개띠는 2028~2030년, 뱀띠·닭띠·소띠는 2031~2033년, 원숭이띠·쥐띠·용띠는 2034~2036년이 삼재예요. 삼재는 조심할 때라는 옛 풀이라서 겁낼 필요는 없어요."}},
 {"@type":"Question","name":"왜 안 좋은 말도 나오나요?","acceptedAnswer":{"@type":"Answer","text":"좋은 말만 하는 풀이는 듣기엔 편해도 도움이 안 돼요. 팔자한장은 타고난 장점과 함께 성격의 그늘, 돈이 새는 곳, 연애에서 부딪히는 곳을 쓴소리로 돌려 말하지 않고 적어요. 다만 병이나 사고처럼 맞힐 수 없는 일을 정해진 운명처럼 말하지는 않아요."}},
 {"@type":"Question","name":"정말 전부 무료인가요?","acceptedAnswer":{"@type":"Answer","text":"네. 가입, 전화번호, 결제 없이 내 사주·오늘의 운세·궁합을 모두 볼 수 있어요."}}
 ]}
@@ -54,9 +56,9 @@
   .trust { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 14px 0 0; padding: 0; list-style: none; }
   .trust li { font-size: 12.5px; color: var(--sub); background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; }
 
-  nav.tabs { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+  nav.tabs { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
     background: var(--paper); padding: 12px 0 10px; margin-top: 10px; }
-  nav.tabs button { font: 700 15px/1 inherit; font-family: inherit; padding: 12px 0; border-radius: 12px; border: 1px solid var(--line);
+  nav.tabs button { font: 700 14px/1.2 inherit; font-family: inherit; padding: 12px 2px; word-break: keep-all; border-radius: 12px; border: 1px solid var(--line);
     background: var(--card); color: var(--sub); cursor: pointer; }
   nav.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
 
@@ -142,6 +144,28 @@
   .card.bitter-card h2 { color: #fff; }
   .card.bitter-card h3 { color: #f0b9a8; }
   .card.bitter-card .muted { color: #b8aa9c; }
+  /* 띠별 삼재 표 */
+  .sj { width: 100%; border-collapse: collapse; font-size: 14px; margin-top: 4px; }
+  .sj th { font-size: 12.5px; color: var(--sub); font-weight: 700; text-align: center; padding: 6px 2px; border-bottom: 1px solid var(--line); }
+  .sj td { text-align: center; padding: 10px 2px; border-bottom: 1px solid var(--line); }
+  .sj td:first-child { text-align: left; font-weight: 700; word-break: keep-all; }
+  .sj td.on { color: #fff; background: var(--red); border-radius: 8px; font-weight: 700; }
+  .sj tr.mine td:first-child { color: var(--red); }
+  .sj tr.mine td:first-child::after { content: ' (나)'; font-size: 12px; }
+  /* 신년운세 달별 */
+  .mon details { border-top: 1px solid var(--line); padding: 10px 0; }
+  .mon details:first-child { border-top: 0; }
+  .mon summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 46px 1fr auto; align-items: center; gap: 6px; }
+  .mon summary::-webkit-details-marker { display: none; }
+  .mon .mn { font: 900 17px/1.1 var(--serif); }
+  .mon .mn small { display: block; font: 500 11.5px/1.3 inherit; font-family: inherit; color: var(--sub); }
+  .mon .mt { font-weight: 700; font-size: 15px; }
+  .mon .mt small { display: block; font-weight: 500; font-size: 12.5px; color: var(--sub); }
+  .mon .stars { font-size: 13px; margin: 0; letter-spacing: 1px; }
+  .mon details > p { margin: 8px 0 0; font-size: 15px; }
+  .pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 4px 0 14px; }
+  .pick div { background: var(--paper); border-radius: 12px; padding: 10px 12px; font-size: 13px; color: var(--sub); }
+  .pick b { display: block; color: var(--ink); font-size: 15px; margin-top: 2px; }
   .notes { font-size: 13px; color: var(--sub); background: var(--paper); border-radius: 12px; padding: 10px 12px; margin-top: 12px; }
   .notes p { margin: 0 0 4px; }
   .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
@@ -171,7 +195,8 @@
 
   <nav class="tabs" role="tablist">
     <button role="tab" aria-selected="true" data-tab="me">내 사주</button>
-    <button role="tab" aria-selected="false" data-tab="today">오늘의 운세</button>
+    <button role="tab" aria-selected="false" data-tab="ny" id="ny-tab">신년운세</button>
+    <button role="tab" aria-selected="false" data-tab="today">오늘 운세</button>
     <button role="tab" aria-selected="false" data-tab="match">궁합</button>
   </nav>
 
@@ -182,6 +207,7 @@
   </section>
 
   <section id="out-me" hidden></section>
+  <section id="out-ny" hidden></section>
   <section id="out-today" hidden></section>
   <section id="tab-match" hidden>
     <div class="card">
@@ -191,6 +217,8 @@
     </div>
     <div id="out-match"></div>
   </section>
+
+  <section class="card" id="samjae-all"></section>
 
   <section class="card faq" id="faq">
     <h2>자주 묻는 질문</h2>
@@ -204,6 +232,10 @@
       <p>사주의 시간은 시계가 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서, 서울은 실제 해 시간보다 32분쯤 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요. 1987·1988년 여름에 있었던 서머타임도 빼고 계산해요.</p></details>
     <details><summary>입력한 생년월일은 어디에 저장되나요?</summary>
       <p>저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요.</p></details>
+    <details><summary>2027년 신년운세는 언제부터 맞나요?</summary>
+      <p>사주에서는 한 해가 양력 1월 1일이 아니라 입춘(2027년은 2월 4일)에 시작해요. 그래서 2027년 1월 1일부터 2월 3일까지는 아직 2026년 병오년 기운이고, 2월 4일부터 정미년 기운이에요. 달마다 운세도 입춘부터 1월로 셉니다.</p></details>
+    <details><summary>2027년 삼재는 무슨 띠인가요?</summary>
+      <p>2027년 정미년은 돼지띠·토끼띠·양띠가 날삼재예요. 2025년에 들어온 삼재가 끝나는 해예요. 호랑이띠·말띠·개띠는 2028~2030년, 뱀띠·닭띠·소띠는 2031~2033년, 원숭이띠·쥐띠·용띠는 2034~2036년이 삼재예요. 삼재는 조심할 때라는 옛 풀이라서 겁낼 필요는 없어요.</p></details>
     <details><summary>왜 안 좋은 말도 나오나요?</summary>
       <p>좋은 말만 하는 풀이는 듣기엔 편해도 도움이 안 돼요. 팔자한장은 타고난 장점과 함께 성격의 그늘, 돈이 새는 곳, 연애에서 부딪히는 곳을 쓴소리로 돌려 말하지 않고 적어요. 다만 병이나 사고처럼 맞힐 수 없는 일을 정해진 운명처럼 말하지는 않아요.</p></details>
     <details><summary>정말 전부 무료인가요?</summary>
@@ -230,6 +262,8 @@
   var NOW = new Date();
   function ro(w) { var c = w.charCodeAt(w.length - 1) - 0xAC00; var j = c % 28; return w + (c >= 0 && j !== 0 && j !== 8 ? '으로' : '로'); }
   var THIS_YEAR = NOW.getFullYear();
+  var NY = NOW.getMonth() >= 9 ? THIS_YEAR + 1 : THIS_YEAR;   // 10월부터는 다음 해 신년운세
+  document.getElementById('ny-tab').textContent = NY + ' 신년운세';
   var me = null, meInput = null, tab = 'me';
 
   // ---------- 입력 폼 ----------
@@ -409,10 +443,105 @@
       '<div class="card fade" style="text-align:center"><p style="margin-bottom:4px">결과를 저장하고 싶으면 화면을 캡처해 두세요.</p>' +
       '<button class="btn ghost" id="share">팔자한장 친구에게 알려 주기</button><button class="btn ghost" id="again" style="margin-top:8px">다른 생년월일로 다시 보기</button></div>';
     $('#out-me').innerHTML = html;
+    $('#out-ny').innerHTML = nyHTML(r, name);
     $('#out-today').innerHTML = todayHTML(r, name) +
       '<div class="card fade"><h2>이번 주 흐름</h2>' + weekHTML(r) + '</div>';
     var sh = $('#share');
     if (sh) sh.addEventListener('click', share);
+  }
+
+
+
+  // ---------- 띠별 삼재 ----------
+  // 묶음(삼합)마다 9년 쉬고 3년 삼재. 그해 지지가 묶음의 「다음 삼합 첫 글자」부터 세 해.
+  var SJ_GROUPS = ['亥卯未', '寅午戌', '巳酉丑', '申子辰'];
+  function yearZhi(y) { return S.ZHI.charAt(((y - 4) % 12 + 12) % 12); }
+  function sjYears(group, around) {
+    // around 해를 포함하거나 그 뒤에 오는 첫 삼재 세 해
+    for (var y = around - 2; y < around + 12; y++) {
+      if (S.samjae(group.charAt(0), yearZhi(y)) === 1) return [y, y + 1, y + 2];
+    }
+    return [];
+  }
+  function samjaeHTML(myZhi) {
+    var groups = SJ_GROUPS.map(function (g) {
+      var ys = sjYears(g, NY);
+      return { g: g, ys: ys, names: g.split('').map(function (z) { return S.ANIMAL[S.zIdx(z)]; }).join('·') + '띠' };
+    }).sort(function (a, b) { return a.ys[0] - b.ys[0]; });
+    var now = groups.filter(function (x) { return x.ys.indexOf(NY) >= 0; })[0];
+    var KIND = ['들삼재', '눌삼재', '날삼재'];
+    var rows = groups.map(function (x) {
+      return '<tr' + (myZhi && x.g.indexOf(myZhi) >= 0 ? ' class="mine"' : '') + '><td>' + x.names + '</td>' +
+        x.ys.map(function (y) { return '<td' + (y === NY ? ' class="on"' : '') + '>' + y + '</td>'; }).join('') + '</tr>';
+    }).join('');
+    var nowIdx = now ? now.ys.indexOf(NY) : -1;
+    return '<h2>' + NY + '년 띠별 삼재 한눈에</h2>' +
+      (now ? '<p><b>' + NY + '년 삼재: ' + now.names + ' (' + KIND[nowIdx] + ')</b></p>' : '') +
+      '<table class="sj"><thead><tr><th>띠</th><th>들삼재</th><th>눌삼재</th><th>날삼재</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      '<p class="muted" style="margin-top:10px">빨간 칸이 ' + NY + '년이에요. 삼재는 띠 셋이 한 묶음으로 9년 쉬고 3년 들어요. 들삼재는 들어오는 해, 눌삼재는 머무는 해, 날삼재는 나가는 해예요. 한 해는 입춘(양력 2월 4일쯤)부터 셉니다.</p>' +
+      '<p class="muted">' + T.SAMJAE_NOTE + '</p>';
+  }
+
+  // ---------- 신년운세 ----------
+  var COLOR = ['푸른', '붉은', '노란', '하얀', '검은'];
+  function batchim(ch) { var c = ch.charCodeAt(0) - 0xAC00; return c >= 0 && c % 28 !== 0; }
+  function zName(z) { return S.ZHI_KO[S.zIdx(z)] + '(' + z + ')'; }
+  function fillZ(t, yz, dz) {
+    var zb = batchim(S.ZHI_KO[S.zIdx(yz)]), db = batchim(S.ZHI_KO[S.zIdx(dz)]);
+    return t.replace('{Z가}', zName(yz) + (zb ? '이' : '가')).replace('{D와}', zName(dz) + (db ? '과' : '와'))
+      .replace('{Z예요}', zName(yz) + (zb ? '이에요' : '예요'));
+  }
+  function relBonus(rel) { return rel === 'harmony' || rel === 'trine' ? 1 : rel === 'clash' ? -1 : 0; }
+  function clamp5(n) { return Math.max(1, Math.min(5, n)); }
+  function md(o) { return o.m + '/' + o.d; }
+
+  function nyHTML(r, name) {
+    var ygz = S.yearGanzhi(NY), yg = ygz.charAt(0), yz = ygz.charAt(1);
+    var yko = S.GAN_KO[S.gIdx(yg)] + S.ZHI_KO[S.zIdx(yz)];
+    var god = S.tenGod(r.dayGan, yg), N = T.NEWYEAR[god];
+    var dRel = S.zhiRelation(r.dayZhi, yz), tRel = S.zhiRelation(r.yearZhi, yz), sj = S.samjae(r.yearZhi, yz);
+    var score = clamp5(N.score + relBonus(dRel));
+
+    var months = S.yearMonths(NY).map(function (m) {
+      var g = S.tenGod(r.dayGan, m.gz.charAt(0)), rel = S.zhiRelation(r.dayZhi, m.gz.charAt(1));
+      return { m: m, god: g, M: T.MONTH[g], rel: rel, score: clamp5(T.MONTH[g].score + relBonus(rel)) };
+    });
+    var hi = Math.max.apply(null, months.map(function (x) { return x.score; }));
+    var lo = Math.min.apply(null, months.map(function (x) { return x.score; }));
+    var pickList = function (v) { return months.filter(function (x) { return x.score === v; }).map(function (x) { return x.m.n + '월'; }).join('·'); };
+
+    var rows = months.map(function (x) {
+      var gzKo = S.GAN_KO[S.gIdx(x.m.gz.charAt(0))] + S.ZHI_KO[S.zIdx(x.m.gz.charAt(1))];
+      return '<details><summary><span class="mn">' + x.m.n + '월<small>' + md(x.m.from) + '~' + md(x.m.to) + '</small></span>' +
+        '<span class="mt">' + x.M.title + '<small>' + gzKo + '월 · ' + x.god + '</small></span><span class="stars">' + stars(x.score) + '</span></summary>' +
+        '<p>' + x.M.text + '</p>' + (T.MONTH_ZHI[x.rel] ? '<p class="muted">' + T.MONTH_ZHI[x.rel] + '</p>' : '') +
+        bitter([x.M.dark], '이달 조심') + '</details>';
+    }).join('');
+
+    var fate = [];
+    if (T.NY_ZHI[dRel]) fate.push(fillZ(T.NY_ZHI[dRel], yz, r.dayZhi));
+    if (T.NY_TTI[tRel]) fate.push('<b>' + r.animal + '띠</b> — ' + T.NY_TTI[tRel]);
+    if (sj) fate.push('<b>' + r.animal + '띠는 ' + NY + '년이 ' + T.SAMJAE[sj] + '</b> ' + T.SAMJAE_NOTE);
+    if (!fate.length) fate.push('올해 지지 ' + zName(yz) + (batchim(S.ZHI_KO[S.zIdx(yz)]) ? '과' : '와') + ' 내 사주 사이에 크게 부딪히거나 합하는 글자는 없어요. 흐름에 크게 휘둘리지 않는 무난한 해예요.');
+
+    return '<div class="card hero fade"><div class="who">' + esc(name) + '의 ' + NY + '년 신년운세</div>' +
+      '<div class="big">' + yko + '년(' + ygz + '年) · ' + COLOR[S.GAN_EL[S.gIdx(yg)]] + ' ' + S.ANIMAL[S.zIdx(yz)] + '의 해</div>' +
+      '<div class="stars">' + stars(score) + '</div><div class="today"><div class="title">' + N.title + '</div></div>' +
+      '<p style="text-align:left">' + NY + '년 기운이 나에게 <b>' + ro(god) + '</b> 들어와요. ' + T.YEAR[god] + '</p>' +
+      '<div style="text-align:left">' + bitter([T.YEAR_DARK[god]]) + '</div></div>' +
+
+      '<div class="card fade"><h2>분야별로 보면</h2>' +
+      '<h3>돈</h3><p>' + N.money + '</p><h3>일</h3><p>' + N.work + '</p>' +
+      '<h3>사람·연애</h3><p>' + N.love + '</p><h3>몸과 마음</h3><p>' + N.body + '</p></div>' +
+
+      '<div class="card fade"><h2>' + yko + '년과 내 사주</h2>' + fate.map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' +
+
+      '<div class="card fade">' + samjaeHTML(r.yearZhi) + '</div>' +
+
+      '<div class="card fade"><h2>달마다 보면</h2>' +
+      '<div class="pick"><div>힘이 붙는 달<b>' + pickList(hi) + '</b></div><div>조심할 달<b>' + (lo < hi ? pickList(lo) : '크게 없음') + '</b></div></div>' +
+      '<div class="mon">' + rows + '</div>' +
+      '<p class="muted" style="margin-top:12px">누르면 그달 풀이가 열려요. 사주에서는 한 해가 입춘(양력 2월 4일쯤)에 시작해서, 1월은 2월 초부터, 12월은 다음 해 1월 초부터예요.</p></div>';
   }
 
   function weekHTML(r) {
@@ -461,6 +590,8 @@
     $('#form-card').hidden = !!me;
     $('#out-me').hidden = !(me && t === 'me');
     $('#out-today').hidden = !(me && t === 'today');
+    $('#out-ny').hidden = !(me && t === 'ny');
+    $('#samjae-all').hidden = !!(me && t === 'ny');
     $('#tab-match').hidden = !(me && t === 'match');
     $('#me-err').textContent = (!me && t !== 'me') ? '먼저 내 생년월일을 넣어 주세요.' : '';
   }
@@ -468,6 +599,7 @@
     b.addEventListener('click', function () { show(b.dataset.tab); window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); });
   });
 
+  $('#samjae-all').innerHTML = samjaeHTML(null);
   wire('me'); wire('you');
   $('#f-me').addEventListener('submit', function (e) {
     e.preventDefault();

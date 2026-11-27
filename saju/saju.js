@@ -170,6 +170,33 @@
     return root.Solar.fromYmd(year, 6, 1).getLunar().getEightChar().getYear();
   }
 
+  /* 신년운세용: 그해 열두 달(절기 달) 기둥과 시작 날짜(한국 시간).
+     1월 = 입춘부터. 라이브러리 절기 시각은 중국 시간이라 60분 더한다. */
+  var JIE = ['立春', '惊蛰', '清明', '立夏', '芒种', '小暑', '立秋', '白露', '寒露', '立冬', '大雪', 'XIAO_HAN', 'LI_CHUN'];
+  function yearMonths(year) {
+    var yg = gIdx(yearGanzhi(year).charAt(0));
+    var start = ((yg % 5) * 2 + 2) % 10;          // 寅월 천간 (갑기년 병인, 을경년 무인 …)
+    var table = root.Lunar.fromYmd(year, 1, 1).getJieQiTable();
+    var days = JIE.map(function (k) {
+      var s = table[k];
+      var t = shift(s.getYear(), s.getMonth(), s.getDay(), s.getHour(), s.getMinute(), 60);
+      return { y: t.y, m: t.m, d: t.d };
+    });
+    var out = [];
+    for (var k = 0; k < 12; k++) {
+      var endDay = new Date(days[k + 1].y, days[k + 1].m - 1, days[k + 1].d - 1);
+      out.push({ n: k + 1, gz: GAN[(start + k) % 10] + ZHI[(2 + k) % 12], from: days[k],
+        to: { y: endDay.getFullYear(), m: endDay.getMonth() + 1, d: endDay.getDate() } });
+    }
+    return out;
+  }
+  /* 삼재: 띠 묶음별로 9년마다 3년. 돌려주는 값 0 아님 / 1 들삼재 / 2 눌삼재 / 3 날삼재 */
+  var SAMJAE = { '申子辰': '寅卯辰', '亥卯未': '巳午未', '寅午戌': '申酉戌', '巳酉丑': '亥子丑' };
+  function samjae(birthZhi, yearZhi) {
+    for (var g in SAMJAE) if (g.indexOf(birthZhi) >= 0) { var p = SAMJAE[g].indexOf(yearZhi); return p >= 0 ? p + 1 : 0; }
+    return 0;
+  }
+
   function zhiRelation(a, b) {
     if (a === b) return 'same';
     if (pairKey(a, b, HARMONY)) return 'harmony';
@@ -185,6 +212,6 @@
     GAN: GAN, ZHI: ZHI, GAN_KO: GAN_KO, ZHI_KO: ZHI_KO, ANIMAL: ANIMAL, EL: EL, EL_HANJA: EL_HANJA,
     GAN_EL: GAN_EL, ZHI_EL: ZHI_EL, PLACES: PLACES, GROUP: GROUP, GROUP_NAME: GROUP_NAME,
     compute: compute, convert: convert, tenGod: tenGod, tenGodZhi: tenGodZhi, dayGanzhi: dayGanzhi, yearGanzhi: yearGanzhi,
-    zhiRelation: zhiRelation, elRelation: elRelation, gIdx: gIdx, zIdx: zIdx
+    zhiRelation: zhiRelation, elRelation: elRelation, gIdx: gIdx, zIdx: zIdx, yearMonths: yearMonths, samjae: samjae
   };
 })(typeof window !== 'undefined' ? window : this);
