@@ -1,0 +1,15 @@
+{
+  "name": "팔자한장 — 내 팔자, 한 장에 정리",
+  "short_name": "팔자한장",
+  "description": "생년월일만 넣으면 사주 원국·오행·대운·오늘의 운세·궁합까지 한 장에. 가입 없이 무료.",
+  "lang": "ko",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f6f1e7",
+  "theme_color": "#f6f1e7",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png"}
+  ]
+}

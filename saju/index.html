@@ -1,0 +1,457 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>팔자한장 — 내 팔자, 한 장에 정리 | 무료 사주·오늘의 운세·궁합</title>
+<meta name="description" content="생년월일만 넣으면 사주팔자 원국, 오행, 타고난 성향, 올해 운, 10년 대운, 오늘의 운세, 궁합까지 한 장에. 가입·전화번호 없이 무료, 입력한 정보는 휴대폰 밖으로 나가지 않아요.">
+<link rel="canonical" href="https://ykk0539-stack.github.io/saju/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="팔자한장">
+<meta property="og:url" content="https://ykk0539-stack.github.io/saju/">
+<meta property="og:title" content="팔자한장 — 내 팔자, 한 장에 정리">
+<meta property="og:description" content="생년월일만 넣으면 내 사주가 한 장에. 오늘의 운세·궁합까지 무료.">
+<meta property="og:image" content="https://ykk0539-stack.github.io/saju/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ko_KR">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="manifest" href="manifest.json">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"태어난 시간을 모르면 사주를 못 보나요?","acceptedAnswer":{"@type":"Answer","text":"볼 수 있어요. 「태어난 시간을 몰라요」에 표시하면 시주를 뺀 여섯 글자로 성향·오행·올해 운·대운을 풀어요. 시간을 알면 여덟 글자가 다 채워져 조금 더 자세해져요."}},
+{"@type":"Question","name":"음력 생일로 넣어도 되나요?","acceptedAnswer":{"@type":"Answer","text":"네. 음력을 고르고 날짜를 넣으면 양력으로 바꿔서 계산해요. 거꾸로 양력을 넣으면 음력 생일을 바로 알려 드려요. 윤달에 태어났다면 윤달이에요에 표시해 주세요."}},
+{"@type":"Question","name":"밤 11시 반 넘어서 태어났으면 날짜가 바뀌나요?","acceptedAnswer":{"@type":"Answer","text":"사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요."}},
+{"@type":"Question","name":"태어난 곳은 왜 물어보나요?","acceptedAnswer":{"@type":"Answer","text":"사주의 시간은 시계 시간이 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서 서울은 실제 해 시간보다 약 32분 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요."}},
+{"@type":"Question","name":"입력한 생년월일은 어디에 저장되나요?","acceptedAnswer":{"@type":"Answer","text":"저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요."}},
+{"@type":"Question","name":"정말 전부 무료인가요?","acceptedAnswer":{"@type":"Answer","text":"네. 가입, 전화번호, 결제 없이 내 사주·오늘의 운세·궁합을 모두 볼 수 있어요."}}
+]}
+</script>
+<meta name="theme-color" content="#f6f1e7">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f6f1e7; --card: #fffdf8; --ink: #2a221c; --sub: #6f6259; --line: #e4dacb;
+    --red: #b8432f; --red-soft: #f6e3dc;
+    --el0: #3c8a56; --el1: #cc4534; --el2: #b9862c; --el3: #7d8591; --el4: #2c4a78;
+    --serif: 'Noto Serif KR', 'Nanum Myeongjo', serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--paper); color: var(--ink);
+    font: 16px/1.7 -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', 'Noto Sans KR', sans-serif;
+    -webkit-text-size-adjust: 100%; word-break: keep-all; }
+  .wrap { max-width: 560px; margin: 0 auto; padding: 0 16px 64px; }
+  header { text-align: center; padding: 28px 0 8px; }
+  .seal { display: inline-grid; place-items: center; width: 52px; height: 52px; border-radius: 10px; background: var(--red); color: #fff;
+    font: 900 15px/1.1 var(--serif); letter-spacing: 1px; transform: rotate(-4deg); box-shadow: 0 2px 0 rgba(0,0,0,.12); }
+  h1 { font: 900 30px/1.2 var(--serif); margin: 12px 0 4px; letter-spacing: -0.5px; }
+  .lead { color: var(--sub); margin: 0; font-size: 15px; }
+  .trust { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; margin: 14px 0 0; padding: 0; list-style: none; }
+  .trust li { font-size: 12.5px; color: var(--sub); background: var(--card); border: 1px solid var(--line); border-radius: 99px; padding: 3px 10px; }
+
+  nav.tabs { position: sticky; top: 0; z-index: 5; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
+    background: var(--paper); padding: 12px 0 10px; margin-top: 10px; }
+  nav.tabs button { font: 700 15px/1 inherit; font-family: inherit; padding: 12px 0; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card); color: var(--sub); cursor: pointer; }
+  nav.tabs button[aria-selected="true"] { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px; padding: 20px 18px; margin: 14px 0; }
+  .card h2 { font: 700 19px/1.4 var(--serif); margin: 0 0 12px; }
+  .card h3 { font: 700 16px/1.4 inherit; margin: 18px 0 6px; }
+  .card p { margin: 0 0 10px; }
+  .muted { color: var(--sub); font-size: 14px; }
+
+  label.f { display: block; font-weight: 700; font-size: 14px; margin: 14px 0 6px; }
+  .row { display: flex; gap: 8px; }
+  .row > * { flex: 1; min-width: 0; }
+  input[type=text], input[type=number], select {
+    width: 100%; font: inherit; font-size: 16px; padding: 12px 12px; border: 1px solid var(--line); border-radius: 12px; background: #fff; color: var(--ink);
+    appearance: none; -webkit-appearance: none; }
+  select { background-image: linear-gradient(45deg, transparent 50%, var(--sub) 50%), linear-gradient(135deg, var(--sub) 50%, transparent 50%);
+    background-position: calc(100% - 18px) 52%, calc(100% - 13px) 52%; background-size: 5px 5px; background-repeat: no-repeat; padding-right: 30px; }
+  .seg { display: flex; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #fff; }
+  .seg label { flex: 1; text-align: center; padding: 11px 0; cursor: pointer; font-weight: 600; color: var(--sub); }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg input:checked + span { color: #fff; }
+  .seg label:has(input:checked) { background: var(--red); color: #fff; }
+  .conv { margin: 2px 2px 0; font-size: 14px; color: var(--red); font-weight: 600; min-height: 0; }
+  .conv:empty { display: none; }
+  .check { display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 14.5px; color: var(--sub); }
+  .check input { width: 18px; height: 18px; accent-color: var(--red); }
+  .btn { display: block; width: 100%; margin-top: 20px; padding: 16px; border: 0; border-radius: 14px; background: var(--red); color: #fff;
+    font: 700 17px/1 inherit; font-family: inherit; cursor: pointer; box-shadow: 0 3px 0 #8f2f20; }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #8f2f20; }
+  .btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); box-shadow: none; font-size: 15px; padding: 13px; }
+  .err { color: var(--red); font-size: 14px; margin-top: 10px; min-height: 1em; }
+
+  /* 원국 표 */
+  .hero { text-align: center; padding: 26px 18px 22px; }
+  .hero .who { color: var(--sub); font-size: 14px; }
+  .hero .big { font: 900 24px/1.4 var(--serif); margin: 6px 0 2px; }
+  .hero .img { font-size: 15px; color: var(--sub); }
+  .chart { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 18px; text-align: center; }
+  .chart .h { font-size: 12.5px; color: var(--sub); font-weight: 700; }
+  .chart .god { font-size: 12px; color: var(--sub); }
+  .chart .god.me { color: var(--red); font-weight: 700; }
+  .ch { border-radius: 12px; padding: 8px 0 6px; color: #fff; }
+  .ch b { display: block; font: 900 30px/1.1 var(--serif); }
+  .ch small { font-size: 12px; opacity: .92; }
+  .ch.empty { background: repeating-linear-gradient(45deg, #efe7da, #efe7da 6px, #f6f1e7 6px, #f6f1e7 12px); color: var(--sub); }
+  .ch.empty b { font-size: 18px; padding: 8px 0; font-family: inherit; font-weight: 600; }
+  .e0 { background: var(--el0); } .e1 { background: var(--el1); } .e2 { background: var(--el2); } .e3 { background: var(--el3); } .e4 { background: var(--el4); }
+  .day-col .ch { outline: 3px solid var(--ink); outline-offset: 1px; }
+
+  .bars { display: grid; gap: 8px; margin-top: 6px; }
+  .bar { display: grid; grid-template-columns: 54px 1fr 30px; align-items: center; gap: 8px; font-size: 14px; }
+  .bar .track { height: 14px; background: #efe7da; border-radius: 99px; overflow: hidden; }
+  .bar .fill { height: 100%; border-radius: 99px; }
+  .bar .n { text-align: right; font-weight: 700; }
+  .tag { display: inline-block; font-size: 12.5px; font-weight: 700; padding: 2px 9px; border-radius: 99px; background: var(--red-soft); color: var(--red); margin-right: 4px; }
+
+  .daeun { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scroll-snap-type: x mandatory; }
+  .du { flex: 0 0 92px; scroll-snap-align: start; border: 1px solid var(--line); border-radius: 12px; padding: 10px 6px; text-align: center; background: #fff; }
+  .du.now { border: 2px solid var(--red); background: var(--red-soft); }
+  .du .age { font-weight: 700; font-size: 14px; }
+  .du .gz { font: 900 22px/1.3 var(--serif); }
+  .du .g { font-size: 12px; color: var(--sub); }
+
+  .today { text-align: center; }
+  .stars { font-size: 26px; letter-spacing: 3px; color: var(--red); margin: 4px 0; }
+  .stars .off { color: #e4dacb; }
+  .today .title { font: 900 22px/1.4 var(--serif); margin: 4px 0 10px; }
+  .lucky { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 14px; }
+  .lucky div { background: var(--paper); border-radius: 12px; padding: 10px 4px; font-size: 13px; color: var(--sub); }
+  .lucky b { display: block; color: var(--ink); font-size: 15px; }
+
+  .score { font: 900 44px/1 var(--serif); color: var(--red); text-align: center; margin: 6px 0; }
+  .pair { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 8px; text-align: center; margin: 10px 0 4px; }
+  .pair .p b { display: block; font: 900 26px/1.2 var(--serif); }
+  .pair .heart { color: var(--red); font-size: 22px; }
+
+  .notes { font-size: 13px; color: var(--sub); background: var(--paper); border-radius: 12px; padding: 10px 12px; margin-top: 12px; }
+  .notes p { margin: 0 0 4px; }
+  .faq details { border-top: 1px solid var(--line); padding: 12px 0; }
+  .faq details:first-of-type { border-top: 0; padding-top: 2px; }
+  .faq summary { font-weight: 700; cursor: pointer; list-style: none; padding-right: 22px; position: relative; }
+  .faq summary::-webkit-details-marker { display: none; }
+  .faq summary::after { content: '+'; position: absolute; right: 2px; top: 0; color: var(--red); font-weight: 900; }
+  .faq details[open] summary::after { content: '−'; }
+  .faq details p { margin: 8px 0 0; color: var(--sub); font-size: 15px; }
+  footer { text-align: center; color: var(--sub); font-size: 12.5px; margin-top: 30px; line-height: 1.8; }
+  [hidden] { display: none !important; }
+  .fade { animation: fade .35s ease; }
+  @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .fade { animation: none; } }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="seal">팔자<br>한장</div>
+    <h1>내 팔자, 한 장에 정리</h1>
+    <p class="lead">생년월일만 넣으면 바로 보여요. 가입도, 결제도 없어요.</p>
+    <ul class="trust">
+      <li>가입·전화번호 없음</li><li>정보는 휴대폰 안에서만</li><li>전부 무료</li>
+    </ul>
+  </header>
+
+  <nav class="tabs" role="tablist">
+    <button role="tab" aria-selected="true" data-tab="me">내 사주</button>
+    <button role="tab" aria-selected="false" data-tab="today">오늘의 운세</button>
+    <button role="tab" aria-selected="false" data-tab="match">궁합</button>
+  </nav>
+
+  <!-- 입력 -->
+  <section id="form-card" class="card">
+    <h2>태어난 날을 알려 주세요</h2>
+    <form id="f-me" autocomplete="off"></form>
+  </section>
+
+  <section id="out-me" hidden></section>
+  <section id="out-today" hidden></section>
+  <section id="tab-match" hidden>
+    <div class="card">
+      <h2>상대방 태어난 날</h2>
+      <p class="muted">위에 넣은 내 정보와 상대방 정보를 같이 봐요.</p>
+      <form id="f-you" autocomplete="off"></form>
+    </div>
+    <div id="out-match"></div>
+  </section>
+
+  <section class="card faq" id="faq">
+    <h2>자주 묻는 질문</h2>
+    <details><summary>태어난 시간을 모르면 사주를 못 보나요?</summary>
+      <p>볼 수 있어요. 「태어난 시간을 몰라요」에 표시하면 시주를 뺀 여섯 글자로 성향·오행·올해 운·대운을 풀어요. 시간을 알면 여덟 글자가 다 채워져서 조금 더 자세해져요.</p></details>
+    <details><summary>음력 생일로 넣어도 되나요?</summary>
+      <p>네. 「음력」을 고르고 날짜를 넣으면 양력으로 바꿔서 계산해요. 거꾸로 양력을 넣으면 음력 생일을 바로 알려 드려요. 윤달에 태어났다면 「윤달이에요」에 표시해 주세요.</p></details>
+    <details><summary>밤 11시 반 넘어서 태어났으면 날짜가 바뀌나요?</summary>
+      <p>사주에서는 해 시간으로 밤 11시, 자시부터 다음 날로 봐요. 서울에서 태어났다면 시계로 밤 11시 32분쯤부터예요. 팔자한장은 태어난 곳에 맞춰 이 경계를 계산해요.</p></details>
+    <details><summary>태어난 곳은 왜 물어보나요?</summary>
+      <p>사주의 시간은 시계가 아니라 해의 위치로 봐요. 한국 표준시는 일본 쪽 경도에 맞춰져 있어서, 서울은 실제 해 시간보다 32분쯤 빨라요. 태어난 곳의 경도로 이 차이를 맞춰요. 1987·1988년 여름에 있었던 서머타임도 빼고 계산해요.</p></details>
+    <details><summary>입력한 생년월일은 어디에 저장되나요?</summary>
+      <p>저장하지 않아요. 계산은 휴대폰 브라우저 안에서만 하고, 서버로 보내지 않아요. 창을 닫으면 사라져요.</p></details>
+    <details><summary>정말 전부 무료인가요?</summary>
+      <p>네. 가입, 전화번호, 결제 없이 내 사주·오늘의 운세·궁합을 모두 볼 수 있어요.</p></details>
+  </section>
+
+  <footer>
+    팔자한장의 풀이는 전통 명리학의 기본 원리로 계산한 <b>재미와 참고용 글</b>이에요.<br>
+    중요한 결정은 사주보다 지금의 내 상황을 먼저 봐 주세요.<br>
+    입력한 정보는 저장되지 않고, 휴대폰 밖으로 보내지 않아요.<br>
+    <a href="privacy.html" style="color:inherit">개인정보 처리방침</a>
+  </footer>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.8/lunar.js"></script>
+<script src="saju.js"></script>
+<script src="texts.js"></script>
+<script>
+(function () {
+  'use strict';
+  var S = window.Saju, T = window.SajuText;
+  var $ = function (s, el) { return (el || document).querySelector(s); };
+  var esc = function (s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); };
+  var NOW = new Date();
+  function ro(w) { var c = w.charCodeAt(w.length - 1) - 0xAC00; var j = c % 28; return w + (c >= 0 && j !== 0 && j !== 8 ? '으로' : '로'); }
+  var THIS_YEAR = NOW.getFullYear();
+  var me = null, meInput = null, tab = 'me';
+
+  // ---------- 입력 폼 ----------
+  function formHTML(id, withName) {
+    var hours = '';
+    for (var h = 0; h < 24; h++) hours += '<option value="' + h + '">' + (h < 12 ? '오전 ' : '오후 ') + ((h % 12) || 12) + '시</option>';
+    var mins = '';
+    for (var m = 0; m < 60; m += 5) mins += '<option value="' + m + '">' + m + '분</option>';
+    var places = S.PLACES.map(function (p, i) { return '<option value="' + i + '">' + p[0] + '</option>'; }).join('');
+    return (withName ? '<label class="f" for="' + id + '-name">이름 <span class="muted">(안 써도 돼요)</span></label>' +
+      '<input type="text" id="' + id + '-name" maxlength="12" placeholder="예: 김하늘">' : '') +
+      '<label class="f">성별</label><div class="seg">' +
+      '<label><input type="radio" name="' + id + '-g" value="f" checked>여자</label><label><input type="radio" name="' + id + '-g" value="m">남자</label></div>' +
+      '<label class="f">생년월일</label><div class="seg" style="margin-bottom:8px">' +
+      '<label><input type="radio" name="' + id + '-cal" value="solar" checked>양력</label><label><input type="radio" name="' + id + '-cal" value="lunar">음력</label></div>' +
+      '<div class="row"><input type="number" id="' + id + '-y" inputmode="numeric" placeholder="년 (예: 1985)" min="1900" max="2100">' +
+      '<input type="number" id="' + id + '-m" inputmode="numeric" placeholder="월" min="1" max="12">' +
+      '<input type="number" id="' + id + '-d" inputmode="numeric" placeholder="일" min="1" max="31"></div>' +
+      '<p class="conv" id="' + id + '-conv" aria-live="polite"></p>' +
+      '<label class="check" data-leap hidden><input type="checkbox" id="' + id + '-leap">윤달이에요</label>' +
+      '<label class="f">태어난 시간</label><div class="row"><select id="' + id + '-h">' + hours + '</select><select id="' + id + '-mi">' + mins + '</select></div>' +
+      '<label class="check"><input type="checkbox" id="' + id + '-nt">태어난 시간을 몰라요</label>' +
+      '<label class="f" for="' + id + '-p">태어난 곳</label><select id="' + id + '-p">' + places + '</select>' +
+      '<div class="err" id="' + id + '-err"></div>' +
+      '<button class="btn" type="submit">' + (id === 'me' ? '내 사주 보기' : '궁합 보기') + '</button>';
+  }
+
+  function wire(id) {
+    var f = $('#f-' + id);
+    f.innerHTML = formHTML(id, true);
+    f.querySelectorAll('input[name="' + id + '-cal"]').forEach(function (r) {
+      r.addEventListener('change', function () { $('[data-leap]', f).hidden = r.value !== 'lunar' || !r.checked; });
+    });
+    var showConv = function () {
+      var y = +$('#' + id + '-y').value, m = +$('#' + id + '-m').value, d = +$('#' + id + '-d').value;
+      var cal = $('input[name="' + id + '-cal"]:checked').value, out = $('#' + id + '-conv');
+      if (!(y >= 1900 && y <= 2100 && m >= 1 && m <= 12 && d >= 1 && d <= 31)) { out.textContent = ''; return; }
+      var c = S.convert(cal, y, m, d, $('#' + id + '-leap').checked);
+      out.textContent = c ? '→ ' + (c.cal === 'lunar' ? '음력 ' : '양력 ') + c.y + '년 ' + (c.leap ? '윤' : '') + c.m + '월 ' + c.d + '일이에요'
+        : (cal === 'lunar' ? '그 음력 날짜는 없어요. 윤달 여부를 확인해 주세요.' : '');
+    };
+    ['y', 'm', 'd', 'leap'].forEach(function (k) { $('#' + id + '-' + k).addEventListener('input', showConv); $('#' + id + '-' + k).addEventListener('change', showConv); });
+    f.querySelectorAll('input[name="' + id + '-cal"]').forEach(function (r) { r.addEventListener('change', showConv); });
+    var nt = $('#' + id + '-nt');
+    nt.addEventListener('change', function () { $('#' + id + '-h').disabled = $('#' + id + '-mi').disabled = nt.checked; });
+    $('#' + id + '-h').value = '12';
+  }
+
+  function readForm(id) {
+    var g = function (s) { return $('#' + id + '-' + s); };
+    var y = +g('y').value, m = +g('m').value, d = +g('d').value;
+    var cal = $('input[name="' + id + '-cal"]:checked').value;
+    var err = '';
+    if (!y || y < 1900 || y > 2100) err = '태어난 해를 네 자리로 넣어 주세요 (1900~2100).';
+    else if (!m || m < 1 || m > 12) err = '태어난 달을 1~12 사이로 넣어 주세요.';
+    else if (!d || d < 1 || d > (cal === 'lunar' ? 30 : new Date(y, m, 0).getDate())) err = '태어난 날이 그 달에 없는 날이에요.';
+    g('err').textContent = err;
+    if (err) return null;
+    var place = S.PLACES[+g('p').value];
+    return { name: g('name').value.trim(), gender: $('input[name="' + id + '-g"]:checked').value, calendar: cal, leap: g('leap').checked,
+      y: y, m: m, d: d, timeKnown: !g('nt').checked, h: +g('h').value, mi: +g('mi').value, lng: place[1], trueSolar: true };
+  }
+
+  function safeCompute(input, errEl) {
+    try { return S.compute(input); }
+    catch (e) { errEl.textContent = input.calendar === 'lunar' ? '그 음력 날짜가 없어요. 윤달 여부와 날짜를 확인해 주세요.' : '계산하지 못했어요. 날짜를 다시 확인해 주세요.'; return null; }
+  }
+
+  // ---------- 그리기 ----------
+  function chartHTML(r) {
+    var cols = r.pillars.map(function (p) {
+      var cls = p.key === 'day' ? ' class="day-col"' : '';
+      if (!p.gz) return '<div' + cls + '><div class="h">' + p.label + '주</div><div class="god">&nbsp;</div>' +
+        '<div class="ch empty"><b>모름</b></div><div style="height:6px"></div><div class="ch empty"><b>모름</b></div><div class="god">&nbsp;</div></div>';
+      return '<div' + cls + '><div class="h">' + p.label + '주</div>' +
+        '<div class="god' + (p.key === 'day' ? ' me' : '') + '">' + p.ganGod + '</div>' +
+        '<div class="ch e' + p.ganEl + '"><b>' + p.gan + '</b><small>' + p.ganKo + ' · ' + S.EL[p.ganEl] + '</small></div>' +
+        '<div style="height:6px"></div>' +
+        '<div class="ch e' + p.zhiEl + '"><b>' + p.zhi + '</b><small>' + p.zhiKo + ' · ' + S.EL[p.zhiEl] + '</small></div>' +
+        '<div class="god">' + p.zhiGod + '</div></div>';
+    }).join('');
+    return '<div class="chart">' + cols + '</div>';
+  }
+
+  function barsHTML(count) {
+    var max = Math.max.apply(null, count.concat([3]));
+    return '<div class="bars">' + count.map(function (n, i) {
+      return '<div class="bar"><span>' + S.EL[i] + '(' + S.EL_HANJA[i] + ')</span><div class="track"><div class="fill e' + i + '" style="width:' + (n / max * 100) + '%"></div></div><span class="n">' + n + '</span></div>';
+    }).join('') + '</div>';
+  }
+
+  function stars(n) {
+    n = Math.max(1, Math.min(5, n));
+    return '★★★★★'.slice(0, n) + '<span class="off">' + '★★★★★'.slice(0, 5 - n) + '</span>';
+  }
+
+  function todayFor(r, date) {
+    var gz = S.dayGanzhi(date);
+    var god = S.tenGod(r.dayGan, gz.charAt(0));
+    var t = T.TODAY[god];
+    var rel = S.zhiRelation(r.dayZhi, gz.charAt(1));
+    var score = t.score + (rel === 'harmony' || rel === 'trine' ? 1 : rel === 'clash' ? -1 : 0);
+    // 행운 기운: 내 사주에서 가장 적은 오행
+    var minEl = r.count.indexOf(Math.min.apply(null, r.count));
+    return { gz: gz, god: god, t: t, rel: rel, score: score, lucky: T.LUCKY[minEl], minEl: minEl };
+  }
+
+  function todayHTML(r, name) {
+    var d = NOW, td = todayFor(r, d);
+    var gzKo = S.GAN_KO[S.gIdx(td.gz.charAt(0))] + S.ZHI_KO[S.zIdx(td.gz.charAt(1))];
+    return '<div class="card today fade"><div class="muted">' + (d.getMonth() + 1) + '월 ' + d.getDate() + '일 ' + gzKo + '(' + td.gz + ')일 · ' + esc(name) + '의 하루</div>' +
+      '<div class="stars">' + stars(td.score) + '</div><div class="title">' + td.t.title + '</div>' +
+      '<p>' + td.t.text + '</p>' + (T.TODAY_ZHI[td.rel] ? '<p class="muted">' + T.TODAY_ZHI[td.rel] + '</p>' : '') +
+      '<div class="lucky"><div>행운의 색<b>' + td.lucky.color + '</b></div><div>좋은 방향<b>' + td.lucky.dir + '</b></div><div>행운의 숫자<b>' + td.lucky.num + '</b></div></div>' +
+      '<p class="muted" style="margin-top:12px">오늘 기운이 나에게 ' + ro(td.god) + ' 들어와요. 행운의 색은 내 사주에 부족한 ' + S.EL[td.minEl] + '(' + S.EL_HANJA[td.minEl] + ') 기운이에요.</p></div>';
+  }
+
+  function renderMe(r, input) {
+    var I = T.ILGAN[r.dayGan];
+    var name = input.name ? input.name + '님' : '당신';
+    var many = [], none = [];
+    r.count.forEach(function (n, i) { if (n >= 3) many.push(T.EL_MANY[i]); if (n === 0) none.push(T.EL_NONE[i]); });
+    var gs = [], gn = [];
+    r.groups.forEach(function (n, i) { if (n >= 3) gs.push(T.GROUP_STRONG[i]); if (n === 0) gn.push(T.GROUP_NONE[i]); });
+    var y1 = S.yearGanzhi(THIS_YEAR), y2 = S.yearGanzhi(THIS_YEAR + 1);
+    var g1 = S.tenGod(r.dayGan, y1.charAt(0)), g2 = S.tenGod(r.dayGan, y2.charAt(0));
+    var cur = -1;
+    r.daeun.forEach(function (du, i) { if (THIS_YEAR >= du.year) cur = i; });
+    var daeunHTML = r.daeun.length ? '<div class="daeun">' + r.daeun.map(function (du, i) {
+      return '<div class="du' + (i === cur ? ' now' : '') + '"><div class="age">' + du.age + '세~</div><div class="gz">' + du.gz + '</div><div class="g">' + du.ko + ' · ' + du.god + '</div>' + (i === cur ? '<div class="g" style="color:var(--red);font-weight:700">지금</div>' : '') + '</div>';
+    }).join('') + '</div>' + (cur >= 0 ? '<p style="margin-top:10px"><span class="tag">지금 대운</span>' + r.daeun[cur].ko + ' 대운 · ' + T.DAEUN[S.GROUP[r.daeun[cur].god]] + '</p>' : '') : '<p class="muted">대운을 계산하지 못했어요.</p>';
+
+    var html =
+      '<div class="card hero fade"><div class="who">' + esc(name) + '의 사주 · 양력 ' + r.solar.y + '년 ' + r.solar.m + '월 ' + r.solar.d + '일 (음력 ' + (r.lunar.y !== r.solar.y ? r.lunar.y + '년 ' : '') + (r.lunar.leap ? '윤' : '') + r.lunar.m + '월 ' + r.lunar.d + '일)생 ' + r.animal + '띠</div>' +
+      '<div class="big">' + I.image + '</div><div class="img">태어난 날의 기운 ' + I.name + '</div>' + chartHTML(r) +
+      (r.notes.length || !r.timeKnown ? '<div class="notes">' + r.notes.map(function (n) { return '<p>' + n + '</p>'; }).join('') +
+        (!r.timeKnown ? '<p>태어난 시간을 몰라서 시주는 빼고 세 기둥으로 봤어요.</p>' : '') + '</div>' : '') + '</div>' +
+
+      '<div class="card fade"><h2>타고난 성향</h2><p>' + I.nature + '</p>' +
+      '<h3>일과 재능</h3><p>' + I.work + '</p><h3>사랑과 관계</h3><p>' + I.love + '</p><h3>이것만 조심하면</h3><p>' + I.care + '</p></div>' +
+
+      '<div class="card fade"><h2>오행 — 내 안의 다섯 기운</h2>' + barsHTML(r.count) +
+      '<div style="margin-top:14px">' + (many.concat(none).map(function (t) { return '<p>' + t + '</p>'; }).join('') || '<p>다섯 기운이 비교적 고르게 있어요. 한쪽으로 치우치지 않아 상황에 따라 유연하게 움직이는 힘이 있어요.</p>') + '</div>' +
+      '<p class="muted">여덟 글자(시간을 모르면 여섯 글자)의 겉 기운만 센 거예요.</p></div>' +
+
+      ((gs.length || gn.length) ? '<div class="card fade"><h2>사주 속 나의 무기</h2>' + gs.concat(gn).map(function (t) { return '<p>' + t + '</p>'; }).join('') + '</div>' : '') +
+
+      '<div class="card fade"><h2>' + THIS_YEAR + '년 · ' + (THIS_YEAR + 1) + '년 운</h2>' +
+      '<h3><span class="tag">' + THIS_YEAR + ' ' + y1 + '</span>' + g1 + '의 해</h3><p>' + T.YEAR[g1] + '</p>' +
+      '<h3><span class="tag">' + (THIS_YEAR + 1) + ' ' + y2 + '</span>' + g2 + '의 해</h3><p>' + T.YEAR[g2] + '</p></div>' +
+
+      '<div class="card fade"><h2>10년마다 바뀌는 큰 흐름 (대운)</h2>' + daeunHTML +
+      '<p class="muted" style="margin-top:8px">옆으로 밀면 더 볼 수 있어요. 나이는 대운이 시작되는 나이예요.</p></div>' +
+
+      '<div class="card fade" style="text-align:center"><p style="margin-bottom:4px">결과를 저장하고 싶으면 화면을 캡처해 두세요.</p>' +
+      '<button class="btn ghost" id="share">팔자한장 친구에게 알려 주기</button><button class="btn ghost" id="again" style="margin-top:8px">다른 생년월일로 다시 보기</button></div>';
+    $('#out-me').innerHTML = html;
+    $('#out-today').innerHTML = todayHTML(r, name) +
+      '<div class="card fade"><h2>이번 주 흐름</h2>' + weekHTML(r) + '</div>';
+    var sh = $('#share');
+    if (sh) sh.addEventListener('click', share);
+  }
+
+  function weekHTML(r) {
+    var out = '';
+    for (var i = 1; i <= 6; i++) {
+      var d = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate() + i);
+      var td = todayFor(r, d);
+      out += '<div class="bar" style="grid-template-columns:64px 1fr auto"><span>' + (d.getMonth() + 1) + '/' + d.getDate() + ' (' + '일월화수목금토'[d.getDay()] + ')</span><span>' + td.t.title + '</span><span class="stars" style="font-size:13px;margin:0;letter-spacing:1px">' + stars(td.score) + '</span></div>';
+    }
+    return '<div class="bars">' + out + '</div>';
+  }
+
+  function renderMatch(a, ai, b, bi) {
+    var rel = S.elRelation(a.dayEl, b.dayEl);
+    var m = T.MATCH_EL[rel];
+    var zr = S.zhiRelation(a.dayZhi, b.dayZhi);
+    var tr = S.zhiRelation(a.yearZhi, b.yearZhi);
+    var score = 60 + m.score * 6 + (zr === 'harmony' || zr === 'trine' ? 8 : zr === 'clash' ? -6 : zr === 'same' ? 3 : 0) + (tr === 'harmony' || tr === 'trine' ? 5 : tr === 'clash' ? -3 : 0);
+    score = Math.max(55, Math.min(98, score));
+    var an = ai.name || '나', bn = bi.name || '상대';
+    var IA = T.ILGAN[a.dayGan], IB = T.ILGAN[b.dayGan];
+    $('#out-match').innerHTML =
+      '<div class="card fade" style="text-align:center"><div class="pair"><div class="p"><b>' + a.dayGan + '</b>' + esc(an) + '<div class="muted">' + IA.image + '</div></div><div class="heart">♥</div>' +
+      '<div class="p"><b>' + b.dayGan + '</b>' + esc(bn) + '<div class="muted">' + IB.image + '</div></div></div>' +
+      '<div class="score">' + score + '점</div><div class="muted">궁합 점수는 재미로 보는 숫자예요</div></div>' +
+      '<div class="card fade"><h2>' + m.title + '</h2><p>' + m.text + '</p>' +
+      (T.MATCH_ZHI[zr] ? '<p>' + T.MATCH_ZHI[zr] + '</p>' : '') +
+      '<p class="muted">' + esc(an) + ' ' + a.animal + '띠 · ' + esc(bn) + ' ' + b.animal + '띠. ' + T.MATCH_TTI[tr] + '</p></div>' +
+      '<div class="card fade"><h2>서로를 이해하는 한 줄</h2><p><b>' + esc(an) + '</b> — ' + IA.love + '</p><p><b>' + esc(bn) + '</b> — ' + IB.love + '</p></div>';
+  }
+
+  function share() {
+    var data = { title: '팔자한장', text: '가입 없이 보는 무료 사주·오늘의 운세·궁합', url: location.href.split('#')[0].split('?')[0] };
+    if (navigator.share) navigator.share(data).catch(function () {});
+    else if (navigator.clipboard) navigator.clipboard.writeText(data.url).then(function () { alert('주소를 복사했어요.'); });
+  }
+
+  // ---------- 탭 ----------
+  function show(t) {
+    tab = t;
+    document.querySelectorAll('nav.tabs button').forEach(function (b) { b.setAttribute('aria-selected', b.dataset.tab === t ? 'true' : 'false'); });
+    $('#form-card').hidden = !!me;
+    $('#out-me').hidden = !(me && t === 'me');
+    $('#out-today').hidden = !(me && t === 'today');
+    $('#tab-match').hidden = !(me && t === 'match');
+    $('#me-err').textContent = (!me && t !== 'me') ? '먼저 내 생년월일을 넣어 주세요.' : '';
+  }
+  document.querySelectorAll('nav.tabs button').forEach(function (b) {
+    b.addEventListener('click', function () { show(b.dataset.tab); window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); });
+  });
+
+  wire('me'); wire('you');
+  $('#f-me').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var i = readForm('me'); if (!i) return;
+    var r = safeCompute(i, $('#me-err')); if (!r) return;
+    me = r; meInput = i;
+    renderMe(r, i);
+    show(tab);
+    setTimeout(function () { window.scrollTo({ top: $('nav.tabs').offsetTop - 4, behavior: 'smooth' }); }, 30);
+    $('#out-match').innerHTML = '';
+  });
+  $('#f-you').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var i = readForm('you'); if (!i) return;
+    var r = safeCompute(i, $('#you-err')); if (!r) return;
+    renderMatch(me, meInput, r, i);
+    $('#out-match').scrollIntoView({ behavior: 'smooth' });
+  });
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.id === 'again') { me = null; show('me'); $('#form-card').scrollIntoView({ behavior: 'smooth' }); }
+  });
+})();
+</script>
+</body>
+</html>
