@@ -144,6 +144,15 @@
   .card.bitter-card h2 { color: #fff; }
   .card.bitter-card h3 { color: #f0b9a8; }
   .card.bitter-card .muted { color: #b8aa9c; }
+  /* 읽는 법 상자 */
+  .help { background: var(--paper); border-radius: 12px; padding: 12px 14px; margin-top: 14px; font-size: 14px; line-height: 1.65; text-align: left; color: var(--ink); }
+  .help .hl { display: inline-block; font-size: 12.5px; font-weight: 800; color: #fff; background: var(--ink); border-radius: 99px; padding: 2px 10px; margin-bottom: 6px; }
+  .help div { margin: 4px 0; }
+  .help .sw { display: inline-block; width: 11px; height: 11px; border-radius: 3px; vertical-align: -1px; margin: 0 2px 0 6px; }
+  .help .sw:first-child { margin-left: 0; }
+  /* 어려운 말 풀이 */
+  .gl { color: var(--sub); font-size: .86em; font-weight: 400; }
+  .bitter .gl, .bitter-card .gl { color: #b8aa9c; }
   /* 저장된 사람 */
   .people { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; justify-content: center; margin-top: 14px; }
   .people .ptitle { font-size: 12.5px; color: var(--sub); margin-right: 2px; }
@@ -265,7 +274,7 @@
 
 <script src="https://cdn.jsdelivr.net/npm/lunar-javascript@1.7.8/lunar.js"></script>
 <script src="saju.js?v=20261127"></script>
-<script src="texts.js?v=20261127"></script>
+<script src="texts.js?v=20261127c"></script>
 <script>
 (function () {
   'use strict';
@@ -345,6 +354,198 @@
   function safeCompute(input, errEl) {
     try { return S.compute(input); }
     catch (e) { errEl.textContent = input.calendar === 'lunar' ? '그 음력 날짜가 없어요. 윤달 여부와 날짜를 확인해 주세요.' : '계산하지 못했어요. 날짜를 다시 확인해 주세요.'; return null; }
+  }
+
+
+  // ---------- 어려운 말 옆에 쉬운 풀이 (11/27 사장님) ----------
+  // 문단(<p>)·소제목(<h3>) 안에서만, 카드·달마다 처음 나올 때 한 번씩 붙인다. 표·칸 안 작은 글씨에는 안 붙인다.
+  var GLOSS = {
+    '일간': '태어난 날의 첫 글자, 사주에서 「나」', '원국': '태어날 때 정해진 여덟 글자', '오행': '나무·불·흙·쇠·물 다섯 기운',
+    '십신': '나와 다른 글자 사이를 열 가지로 나눈 것', '천간': '사주 위쪽 글자', '지지': '사주 아래쪽 글자, 띠 글자',
+    '대운': '10년마다 바뀌는 큰 흐름', '일진': '그날의 기운', '삼합': '셋이 모여 한편이 되는 사이',
+    '「합」': '서로 끌어당겨 잘 맞는 사이', '「충」': '서로 부딪혀 흔들리는 사이', '입춘': '사주에서 새해가 시작되는 날, 양력 2월 4일쯤',
+    '자시': '밤 11시~새벽 1시', '시주': '태어난 시간의 두 글자', '일주': '태어난 날의 두 글자', '월주': '태어난 달의 두 글자', '연주': '태어난 해의 두 글자',
+    '들삼재': '삼재가 들어오는 첫해', '눌삼재': '삼재가 머무는 가운데 해', '날삼재': '삼재가 나가는 마지막 해', '삼재': '9년마다 3년씩 오는 조심할 때',
+    '비견': '나와 같은 기운, 친구·동료', '겁재': '내 몫을 넘보는 경쟁자 기운', '식신': '먹고 즐기고 재주를 펴는 기운',
+    '상관': '말과 표현이 날카로운 기운', '편재': '크게 들고 나는 돈, 사업 돈', '정재': '꼬박꼬박 들어오는 돈, 월급',
+    '편관': '나를 누르는 압박과 책임', '정관': '나를 반듯하게 잡아 주는 규칙과 자리', '편인': '남다른 생각과 공부, 예민함',
+    '정인': '나를 돕는 사람·문서·배움', '비겁': '비견·겁재, 나와 같은 편', '식상': '식신·상관, 표현하고 만드는 힘',
+    '재성': '편재·정재, 돈과 결과', '관성': '편관·정관, 책임과 명예', '인성': '편인·정인, 배움과 도움'
+  };
+  var GL_RE = new RegExp(Object.keys(GLOSS).sort(function (a, b) { return b.length - a.length; })
+    .map(function (k) { return k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }).join('|'), 'g');
+  function glossP(p, seen) {
+    return p.replace(GL_RE, function (m, off, str) {
+      if (seen[m] || str.charAt(off - 1) === '(') return m;   // 이미 풀었거나 괄호 안 설명이면 그대로
+      var nx = str.charAt(off + m.length);   // 「상관없다」「지지하다」처럼 다른 낱말이면 건너뜀
+      if ((m === '상관' && /[없있]/.test(nx)) || (m === '지지' && /[하해한]/.test(nx))) return m;
+      seen[m] = 1;
+      return m + '<span class="gl">(' + GLOSS[m] + ')</span>';
+    });
+  }
+  function easy(html) {
+    return html.split(/(?=<div class="card)|(?=<details)/).map(function (chunk) {
+      var seen = {};
+      return chunk.replace(/<(p|h3)\b[^>]*>[\s\S]*?<\/\1>/g, function (p) { return glossP(p, seen); });
+    }).join('');
+  }
+
+  // ---------- 결과 카드 그림 (캔버스로 그려서 저장·공유) ----------
+  var cardData = null, matchData = null;
+  var SANS = '"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif', SERIF = '"Noto Serif KR",serif';
+  function cssVar(n) { return getComputedStyle(document.documentElement).getPropertyValue(n).trim(); }
+  function rrect(c, x, y, w, h, r) { c.beginPath(); c.moveTo(x + r, y); c.arcTo(x + w, y, x + w, y + h, r); c.arcTo(x + w, y + h, x, y + h, r); c.arcTo(x, y + h, x, y, r); c.arcTo(x, y, x + w, y, r); c.closePath(); }
+  function wrap(c, text, x, y, maxW, lh, maxLines) {
+    var line = '', lines = [];
+    for (var i = 0; i < text.length; i++) {
+      var t = line + text.charAt(i);
+      if (c.measureText(t).width > maxW && line) { lines.push(line); line = text.charAt(i); } else line = t;
+    }
+    if (line) lines.push(line);
+    if (maxLines && lines.length > maxLines) { lines = lines.slice(0, maxLines); lines[maxLines - 1] = lines[maxLines - 1].replace(/.$/, '…'); }
+    lines.forEach(function (l, k) { c.fillText(l, x, y + k * lh); });
+    return y + lines.length * lh;
+  }
+  function firstSentence(t) { var m = t.match(/^[^.]*?[요다]\./); return m ? m[0] : t; }
+  function starText(n) { return '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n); }
+
+  function baseCanvas() {
+    var W = 1080, H = 1350, cv = document.createElement('canvas');
+    cv.width = W; cv.height = H;
+    var c = cv.getContext('2d');
+    c.fillStyle = '#f6f1e7'; c.fillRect(0, 0, W, H);
+    c.fillStyle = '#fffdf8'; rrect(c, 50, 50, W - 100, H - 100, 44); c.fill();
+    c.strokeStyle = '#e4dacb'; c.lineWidth = 3; c.stroke();
+    // 도장
+    c.fillStyle = '#b8432f'; rrect(c, W / 2 - 52, 100, 104, 104, 22); c.fill();
+    c.fillStyle = '#fff'; c.font = '900 34px ' + SERIF; c.textAlign = 'center';
+    c.fillText('팔자', W / 2, 146); c.fillText('한장', W / 2, 186);
+    // 바닥
+    c.fillStyle = '#6f6259'; c.font = '600 30px ' + SANS;
+    c.fillText('팔자한장 · ykk0539-stack.github.io/saju', W / 2, H - 120);
+    c.font = '500 24px ' + SANS; c.fillText('가입 없이 무료 · 생년월일만 넣으면 한 장에', W / 2, H - 82);
+    return { cv: cv, c: c, W: W, H: H };
+  }
+
+  function drawMe(d) {
+    var B = baseCanvas(), c = B.c, W = B.W, r = d.r, I = T.ILGAN[r.dayGan], D = T.DARK[r.dayGan];
+    c.textAlign = 'center';
+    c.fillStyle = '#6f6259'; c.font = '500 30px ' + SANS;
+    c.fillText(d.name + '의 사주 · ' + r.solar.y + '.' + r.solar.m + '.' + r.solar.d + '생 ' + r.animal + '띠', W / 2, 262);
+    c.fillStyle = '#2a221c'; c.font = '900 62px ' + SERIF; c.fillText(I.image, W / 2, 352);
+    c.fillStyle = '#6f6259'; c.font = '500 30px ' + SANS; c.fillText('태어난 날의 기운 ' + I.name, W / 2, 400);
+    // 네 기둥
+    var colW = 200, gap = 18, x0 = (W - (colW * 4 + gap * 3)) / 2, y0 = 450;
+    r.pillars.forEach(function (p, i) {
+      var x = x0 + i * (colW + gap);
+      c.fillStyle = '#6f6259'; c.font = '700 26px ' + SANS; c.fillText(p.label + '주', x + colW / 2, y0);
+      [['gan', 'ganEl', 'ganKo'], ['zhi', 'zhiEl', 'zhiKo']].forEach(function (k, j) {
+        var y = y0 + 22 + j * 152;
+        if (!p.gz) { c.fillStyle = '#efe7da'; rrect(c, x, y, colW, 140, 22); c.fill(); c.fillStyle = '#6f6259'; c.font = '600 30px ' + SANS; c.fillText('모름', x + colW / 2, y + 82); return; }
+        c.fillStyle = cssVar('--el' + p[k[1]]) || '#888'; rrect(c, x, y, colW, 140, 22); c.fill();
+        if (p.key === 'day') { c.strokeStyle = '#2a221c'; c.lineWidth = 6; rrect(c, x - 4, y - 4, colW + 8, 148, 25); c.stroke(); }
+        c.fillStyle = '#fff'; c.font = '900 70px ' + SERIF; c.fillText(p[k[0]], x + colW / 2, y + 86);
+        c.font = '600 24px ' + SANS; c.fillText(p[k[2]] + ' · ' + S.EL[p[k[1]]], x + colW / 2, y + 124);
+      });
+    });
+    // 올해 줄 + 쓴소리
+    c.textAlign = 'left';
+    var y = 820, L = 110, maxW = W - 220;
+    c.fillStyle = '#b8432f'; c.font = '800 30px ' + SANS; c.fillText(NY + '년 ' + d.nyTitle + '  ' + starText(d.nyScore), L, y);
+    c.fillStyle = '#2a221c'; c.font = '500 32px ' + SANS;
+    y = wrap(c, firstSentence(I.nature), L, y + 56, maxW, 48, 2);
+    c.fillStyle = '#2a221c'; rrect(c, L - 20, y + 4, maxW + 40, 200, 24); c.fill();
+    c.fillStyle = '#b8432f'; rrect(c, L, y + 30, 112, 40, 20); c.fill();
+    c.fillStyle = '#fff'; c.font = '800 24px ' + SANS; c.fillText('쓴소리', L + 20, y + 59);
+    c.fillStyle = '#f3ebe0'; c.font = '500 30px ' + SANS;
+    wrap(c, D.self, L, y + 112, maxW, 44, 2);
+    return B.cv;
+  }
+
+  function drawMatch(d) {
+    var B = baseCanvas(), c = B.c, W = B.W;
+    c.textAlign = 'center';
+    c.fillStyle = '#6f6259'; c.font = '500 30px ' + SANS; c.fillText('팔자한장 궁합', W / 2, 262);
+    [[d.an, d.a], [d.bn, d.b]].forEach(function (p, i) {
+      var x = i ? W / 2 + 210 : W / 2 - 210;
+      c.fillStyle = cssVar('--el' + p[1].dayEl) || '#888'; rrect(c, x - 110, 300, 220, 200, 30); c.fill();
+      c.fillStyle = '#fff'; c.font = '900 110px ' + SERIF; c.fillText(p[1].dayGan, x, 435);
+      c.fillStyle = '#2a221c'; c.font = '700 36px ' + SANS; c.fillText(p[0], x, 556);
+      c.fillStyle = '#6f6259'; c.font = '500 26px ' + SANS; c.fillText(T.ILGAN[p[1].dayGan].image, x, 598);
+    });
+    c.fillStyle = '#b8432f'; c.font = '700 60px ' + SANS; c.fillText('♥', W / 2, 420);
+    c.font = '900 150px ' + SERIF; c.fillText(d.score + '점', W / 2, 790);
+    c.fillStyle = '#2a221c'; c.font = '800 44px ' + SERIF; c.fillText(d.m.title, W / 2, 880);
+    c.textAlign = 'left'; c.font = '500 32px ' + SANS; c.fillStyle = '#2a221c';
+    var y = wrap(c, firstSentence(d.m.text), 110, 950, W - 220, 48, 2);
+    c.fillStyle = '#2a221c'; rrect(c, 90, y + 4, W - 180, 150, 24); c.fill();
+    c.fillStyle = '#f3ebe0'; c.font = '500 30px ' + SANS;
+    wrap(c, '쓴소리 — ' + T.MATCH_EL_DARK[d.rel], 110, y + 66, W - 220, 44, 2);
+    return B.cv;
+  }
+
+  function saveCard(kind, btn) {
+    var d = kind === 'match' ? matchData : cardData; if (!d) return;
+    var old = btn.textContent; btn.textContent = '그림 만드는 중…'; btn.disabled = true;
+    var done = function () { btn.textContent = old; btn.disabled = false; };
+    var fontsReady = document.fonts && document.fonts.load ? Promise.all([document.fonts.load('900 60px "Noto Serif KR"'), document.fonts.load('800 44px "Noto Serif KR"')]).catch(function () {}) : Promise.resolve();
+    fontsReady.then(function () {
+      var cv = kind === 'match' ? drawMatch(d) : drawMe(d);
+      cv.toBlob(function (blob) {
+        if (!blob) return done();
+        var fname = '팔자한장_' + (kind === 'match' ? '궁합' : '사주') + '.png';
+        var file = typeof File !== 'undefined' ? new File([blob], fname, { type: 'image/png' }) : null;
+        var mobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+        if (mobile && file && navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator.share({ files: [file], title: '팔자한장', text: '내 팔자, 한 장에 정리 — https://ykk0539-stack.github.io/saju/' })
+            .catch(function () {}).then(done);
+        } else {
+          var a = document.createElement('a');
+          a.href = URL.createObjectURL(blob); a.download = fname;
+          document.body.appendChild(a); a.click(); a.remove();
+          setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+          done();
+        }
+      }, 'image/png');
+    });
+  }
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('[data-card]');
+    if (b) saveCard(b.dataset.card, b);
+  });
+
+  // ---------- 읽는 법 상자 ----------
+  var EL_COLOR = ['초록', '빨강', '노랑', '회색', '파랑'];
+  function godList(gods) {
+    var seen = {}, out = [];
+    gods.forEach(function (g) { if (g && T.GOD_MEAN[g] && !seen[g]) { seen[g] = 1; out.push('<div><b>' + g + '</b> — ' + T.GOD_MEAN[g] + '</div>'); } });
+    return out.join('');
+  }
+  function helpBox(title, inner) { return '<div class="help"><span class="hl">' + title + '</span>' + inner + '</div>'; }
+  function chartHelp(r) {
+    var gods = [];
+    r.pillars.forEach(function (p) { if (!p.gz) return; if (p.ganGod !== '나') gods.push(p.ganGod); gods.push(p.zhiGod); });
+    var sw = EL_COLOR.map(function (c, i) { return '<span class="sw e' + i + '"></span>' + S.EL[i] + '(' + c + ')'; }).join(' ');
+    return helpBox('이 표 읽는 법',
+      '<div>네 칸은 왼쪽부터 태어난 <b>시간·날·달·해</b>예요. 칸마다 위아래 두 글자, 모두 여덟 글자라서 「사주팔자」라고 불러요.</div>' +
+      '<div><b>굵은 테두리</b>가 나예요. 태어난 날의 위 글자가 사주에서 「나」를 뜻해요.</div>' +
+      '<div><b>칸 색깔</b>은 다섯 기운이에요: ' + sw + '</div>' +
+      '<div><b>칸 위아래 작은 글씨</b>는 그 글자가 나에게 어떤 사이인지예요. 이 사주에 나온 것만 풀면:</div>' + godList(gods));
+  }
+  function elHelp() {
+    return helpBox('다섯 기운이 뭐예요?', T.EL_MEAN.map(function (t) { return '<div>' + t + '</div>'; }).join('') +
+      '<div style="margin-top:8px">' + T.EL_HOW + '</div>' +
+      '<div>오른쪽 숫자는 여덟 글자 가운데 그 기운 글자가 몇 개인지예요. 3개 이상이면 많은 편, 0개면 없는 편이에요.</div>');
+  }
+  function daeunHelp(r) {
+    return helpBox('이 칸 읽는 법',
+      '<div>사람마다 10년씩 바뀌는 큰 흐름이 있어요. 칸 맨 위 숫자는 그 흐름이 <b>시작되는 나이</b>, 가운데 두 글자는 그 10년의 기운, 맨 아래 작은 글씨는 그 10년이 <b>나에게 어떤 기운인지</b>예요. 빨간 칸이 지금이에요.</div>' +
+      godList(r.daeun.map(function (d) { return d.god; })));
+  }
+  function yearHelp(g1, g2) {
+    return helpBox('「○○의 해」가 무슨 뜻이에요?',
+      '<div>그해의 두 글자가 나에게 어떤 기운으로 들어오는지를 말해요.</div>' + godList([g1, g2]) +
+      '<div style="margin-top:6px">' + T.GOD_HOW + '</div>');
   }
 
   // ---------- 그리기 ----------
@@ -427,6 +628,7 @@
     var html =
       '<div class="card hero fade"><div class="who">' + esc(name) + '의 사주 · 양력 ' + r.solar.y + '년 ' + r.solar.m + '월 ' + r.solar.d + '일 (음력 ' + (r.lunar.y !== r.solar.y ? r.lunar.y + '년 ' : '') + (r.lunar.leap ? '윤' : '') + r.lunar.m + '월 ' + r.lunar.d + '일)생 ' + r.animal + '띠</div>' +
       '<div class="big">' + I.image + '</div><div class="img">태어난 날의 기운 ' + I.name + '</div>' + chartHTML(r) +
+      chartHelp(r) +
       (r.notes.length || !r.timeKnown ? '<div class="notes">' + r.notes.map(function (n) { return '<p>' + n + '</p>'; }).join('') +
         (!r.timeKnown ? '<p>태어난 시간을 몰라서 시주는 빼고 세 기둥으로 봤어요.</p>' : '') + '</div>' : '') + '</div>' +
 
@@ -442,7 +644,7 @@
       (elDark.length || grDark.length ? '<h3>내 사주 짜임에서 보이는 약점</h3>' + elDark.concat(grDark).map(function (t) { return '<p>' + t + '</p>'; }).join('') : '') +
       '</div>' +
 
-      '<div class="card fade"><h2>오행 — 내 안의 다섯 기운</h2>' + barsHTML(r.count) +
+      '<div class="card fade"><h2>오행 — 내 안의 다섯 기운</h2>' + barsHTML(r.count) + elHelp() +
       '<div style="margin-top:14px">' + (many.concat(none).map(function (t) { return '<p>' + t + '</p>'; }).join('') || '<p>다섯 기운이 비교적 고르게 있어요. 한쪽으로 치우치지 않아 상황에 따라 유연하게 움직이는 힘이 있어요.</p>') + '</div>' +
       '<p class="muted">여덟 글자(시간을 모르면 여섯 글자)의 겉 기운만 센 거예요.</p></div>' +
 
@@ -450,17 +652,21 @@
 
       '<div class="card fade"><h2>' + THIS_YEAR + '년 · ' + (THIS_YEAR + 1) + '년 운</h2>' +
       '<h3><span class="tag">' + THIS_YEAR + ' ' + y1 + '</span>' + g1 + '의 해</h3><p>' + T.YEAR[g1] + '</p>' + bitter([T.YEAR_DARK[g1]]) +
-      '<h3><span class="tag">' + (THIS_YEAR + 1) + ' ' + y2 + '</span>' + g2 + '의 해</h3><p>' + T.YEAR[g2] + '</p>' + bitter([T.YEAR_DARK[g2]]) + '</div>' +
+      '<h3><span class="tag">' + (THIS_YEAR + 1) + ' ' + y2 + '</span>' + g2 + '의 해</h3><p>' + T.YEAR[g2] + '</p>' + bitter([T.YEAR_DARK[g2]]) + yearHelp(g1, g2) + '</div>' +
 
       '<div class="card fade"><h2>10년마다 바뀌는 큰 흐름 (대운)</h2>' + daeunHTML +
-      '<p class="muted" style="margin-top:8px">옆으로 밀면 더 볼 수 있어요. 나이는 대운이 시작되는 나이예요.</p></div>' +
+      '<p class="muted" style="margin-top:8px">옆으로 밀면 더 볼 수 있어요.</p>' + daeunHelp(r) + '</div>' +
 
-      '<div class="card fade" style="text-align:center"><p style="margin-bottom:4px">' + (meId ? '이 휴대폰에 기억해 뒀어요. 다음에 열면 바로 보여요.' : '결과를 남기고 싶으면 화면을 캡처해 두세요.') + '</p>' +
+      '<div class="card fade" style="text-align:center"><button class="btn" data-card="me" style="margin-top:0">내 사주 한 장 그림으로 저장·보내기</button>' +
+      '<p class="muted" style="margin:10px 0 4px">' + (meId ? '이 휴대폰에 기억해 뒀어요. 다음에 열면 바로 보여요.' : '그림은 휴대폰 사진첩에 저장되거나 카톡으로 보낼 수 있어요.') + '</p>' +
       '<button class="btn ghost" id="share">팔자한장 친구에게 알려 주기</button><button class="btn ghost" id="again" style="margin-top:8px">다른 사람 사주 보기</button></div>';
-    $('#out-me').innerHTML = html;
-    $('#out-ny').innerHTML = nyHTML(r, name);
-    $('#out-today').innerHTML = todayHTML(r, name) +
-      '<div class="card fade"><h2>이번 주 흐름</h2>' + weekHTML(r) + '</div>';
+    $('#out-me').innerHTML = easy(html);
+    var ygz0 = S.yearGanzhi(NY), N0 = T.NEWYEAR[S.tenGod(r.dayGan, ygz0.charAt(0))];
+    cardData = { r: r, name: input.name || '나', nyTitle: N0.title,
+      nyScore: clamp5(N0.score + relBonus(S.zhiRelation(r.dayZhi, ygz0.charAt(1)))) };
+    $('#out-ny').innerHTML = easy(nyHTML(r, name));
+    $('#out-today').innerHTML = easy(todayHTML(r, name) +
+      '<div class="card fade"><h2>이번 주 흐름</h2>' + weekHTML(r) + '</div>');
     var sh = $('#share');
     if (sh) sh.addEventListener('click', share);
   }
@@ -529,7 +735,7 @@
       var gzKo = S.GAN_KO[S.gIdx(x.m.gz.charAt(0))] + S.ZHI_KO[S.zIdx(x.m.gz.charAt(1))];
       return '<details><summary><span class="mn">' + x.m.n + '월<small>' + md(x.m.from) + '~' + md(x.m.to) + '</small></span>' +
         '<span class="mt">' + x.M.title + '<small>' + gzKo + '월 · ' + x.god + '</small></span><span class="stars">' + stars(x.score) + '</span></summary>' +
-        '<p>' + x.M.text + '</p>' + (T.MONTH_ZHI[x.rel] ? '<p class="muted">' + T.MONTH_ZHI[x.rel] + '</p>' : '') +
+        '<p>' + x.M.text + '</p><p class="muted">이달은 ' + x.god + '의 달이에요.</p>' + (T.MONTH_ZHI[x.rel] ? '<p class="muted">' + T.MONTH_ZHI[x.rel] + '</p>' : '') +
         bitter([x.M.dark], '이달 조심') + '</details>';
     }).join('');
 
@@ -578,7 +784,8 @@
     score = Math.max(55, Math.min(98, score));
     var an = ai.name || '나', bn = bi.name || '상대';
     var IA = T.ILGAN[a.dayGan], IB = T.ILGAN[b.dayGan];
-    $('#out-match').innerHTML =
+    matchData = { a: a, b: b, an: an, bn: bn, score: score, m: m, rel: rel };
+    $('#out-match').innerHTML = easy(
       '<div class="card fade" style="text-align:center"><div class="pair"><div class="p"><b>' + a.dayGan + '</b>' + esc(an) + '<div class="muted">' + IA.image + '</div></div><div class="heart">♥</div>' +
       '<div class="p"><b>' + b.dayGan + '</b>' + esc(bn) + '<div class="muted">' + IB.image + '</div></div></div>' +
       '<div class="score">' + score + '점</div><div class="muted">궁합 점수는 재미로 보는 숫자예요</div></div>' +
@@ -589,7 +796,8 @@
       '<div class="card bitter-card fade"><h2>쓴소리 — 이 둘이 부딪히는 곳</h2>' +
       '<p>' + T.MATCH_EL_DARK[rel] + '</p>' + (T.MATCH_ZHI_DARK[zr] ? '<p>' + T.MATCH_ZHI_DARK[zr] + '</p>' : '') +
       '<h3>' + esc(an) + '의 연애 약점</h3><p>' + T.DARK[a.dayGan].love + '</p>' +
-      '<h3>' + esc(bn) + '의 연애 약점</h3><p>' + T.DARK[b.dayGan].love + '</p></div>';
+      '<h3>' + esc(bn) + '의 연애 약점</h3><p>' + T.DARK[b.dayGan].love + '</p></div>' +
+      '<div class="card fade" style="text-align:center"><button class="btn" data-card="match" style="margin-top:0">궁합 한 장 그림으로 저장·보내기</button></div>');
   }
 
   function share() {
